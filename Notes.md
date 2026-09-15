@@ -421,6 +421,26 @@ if (marks >= 80) {
 }
 ```
 
+### `if - else if - else`
+
+Use an `if - else if - else` chain when there are several possible conditions. Java checks the conditions from top to bottom and runs only the first matching block.
+
+```java
+int marks = 85;
+
+if (marks >= 80) {
+	System.out.println("Grade: A");
+} else if (marks >= 60) {
+	System.out.println("Grade: B");
+} else if (marks >= 40) {
+	System.out.println("Grade: C");
+} else {
+	System.out.println("Grade: F");
+}
+```
+
+Because `85 >= 80` is true, this example prints `Grade: A` and skips the remaining conditions.
+
 ### 10.4 Nested `if`
 
 A nested `if` is an `if` statement inside another `if` statement.

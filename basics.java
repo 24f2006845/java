@@ -66,6 +66,17 @@ class Hello {
             System.out.println("Failed.");
         }
 
+        // if-else if-else checks conditions from top to bottom.
+        if (marks >= 80) {
+            System.out.println("Grade: A");
+        } else if (marks >= 60) {
+            System.out.println("Grade: B");
+        } else if (marks >= 40) {
+            System.out.println("Grade: C");
+        } else {
+            System.out.println("Grade: F");
+        }
+
         // Switch selects one block based on a value.
         int day = 2;
         switch (day) {
