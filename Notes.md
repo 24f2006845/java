@@ -350,3 +350,130 @@ String result = String.valueOf(number);
 - Narrowing conversion requires explicit casting and may lose data.
 - Casting changes how Java treats a compatible value or reference.
 - Parsing converts text, such as `"42"`, into a numeric value.
+
+## 10. Operators and Conditional Statements
+
+Operators perform operations on values. Conditional statements allow a program to choose which code to execute.
+
+### 10.1 Relational Operators
+
+Relational operators compare two values and return a `boolean` result:
+
+| Operator | Meaning | Example |
+|---|---|---|
+| `==` | Equal to | `age == 18` |
+| `!=` | Not equal to | `age != 18` |
+| `>` | Greater than | `marks > 50` |
+| `<` | Less than | `marks < 50` |
+| `>=` | Greater than or equal to | `age >= 18` |
+| `<=` | Less than or equal to | `age <= 60` |
+
+```java
+int age = 20;
+System.out.println(age >= 18);  // true
+System.out.println(age == 16);  // false
+```
+
+### 10.2 Logical Operators
+
+Logical operators combine or reverse boolean conditions:
+
+| Operator | Meaning | Example |
+|---|---|---|
+| `&&` | Logical AND; both conditions must be true | `age >= 18 && hasId` |
+| `||` | Logical OR; at least one condition must be true | `age < 13 || age > 65` |
+| `!` | Logical NOT; reverses a boolean result | `!isClosed` |
+
+```java
+int age = 20;
+boolean hasId = true;
+
+if (age >= 18 && hasId) {
+	System.out.println("Allowed to enter.");
+}
+```
+
+Java uses short-circuit evaluation. With `&&`, the second condition is checked only if the first is true. With `||`, the second condition is checked only if the first is false.
+
+### 10.3 `if` Statement
+
+An `if` statement runs a block only when its condition is true.
+
+```java
+int marks = 75;
+
+if (marks >= 40) {
+	System.out.println("Passed");
+} else {
+	System.out.println("Failed");
+}
+```
+
+For multiple conditions, use `else if`:
+
+```java
+if (marks >= 80) {
+	System.out.println("Grade A");
+} else if (marks >= 60) {
+	System.out.println("Grade B");
+} else {
+	System.out.println("Needs improvement");
+}
+```
+
+### 10.4 Nested `if`
+
+A nested `if` is an `if` statement inside another `if` statement.
+
+```java
+int marks = 85;
+
+if (marks >= 40) {
+	if (marks >= 80) {
+		System.out.println("Passed with distinction");
+	} else {
+		System.out.println("Passed");
+	}
+} else {
+	System.out.println("Failed");
+}
+```
+
+### 10.5 `switch` Statement
+
+Use `switch` when one expression is compared with several fixed values.
+
+```java
+int day = 2;
+
+switch (day) {
+	case 1:
+		System.out.println("Monday");
+		break;
+	case 2:
+		System.out.println("Tuesday");
+		break;
+	default:
+		System.out.println("Another day");
+}
+```
+
+The `break` statement stops execution from continuing into the next case. The `default` block runs when no case matches.
+
+### 10.6 Ternary Operator
+
+The ternary operator is a short form of a simple `if-else` statement:
+
+```java
+condition ? valueIfTrue : valueIfFalse;
+```
+
+Example:
+
+```java
+int marks = 75;
+String result = marks >= 40 ? "Pass" : "Fail";
+System.out.println(result);
+```
+
+Use the ternary operator for short expressions. Use `if-else` when the logic has multiple statements or is harder to read.

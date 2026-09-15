@@ -35,5 +35,52 @@ class Hello {
         System.out.println("Widened int to double: " + widenedNumber);
         System.out.println("Narrowed double to int: " + narrowedNumber);
         System.out.println("Cast int to byte: " + castByte);
+
+        int age = 20;
+        boolean hasId = true;
+
+        // Relational operators compare values.
+        System.out.println("Age is greater than 18: " + (age > 18));
+        System.out.println("Age is equal to 20: " + (age == 20));
+
+        // Logical operators combine conditions.
+        if (age >= 18 && hasId) {
+            System.out.println("Allowed to enter.");
+        }
+
+        if (age < 13 || age > 65) {
+            System.out.println("Eligible for a special discount.");
+        } else {
+            System.out.println("Regular ticket price.");
+        }
+
+        // Nested if: an if statement inside another if statement.
+        int marks = 85;
+        if (marks >= 40) {
+            if (marks >= 80) {
+                System.out.println("Passed with distinction.");
+            } else {
+                System.out.println("Passed.");
+            }
+        } else {
+            System.out.println("Failed.");
+        }
+
+        // Switch selects one block based on a value.
+        int day = 2;
+        switch (day) {
+            case 1:
+                System.out.println("Monday");
+                break;
+            case 2:
+                System.out.println("Tuesday");
+                break;
+            default:
+                System.out.println("Another day");
+        }
+
+        // Ternary operator: short form of a simple if-else.
+        String result = marks >= 40 ? "Pass" : "Fail";
+        System.out.println("Result: " + result);
     }
 }
