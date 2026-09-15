@@ -56,6 +56,13 @@ class Hello {
             System.out.println("Regular ticket price.");
         }
 
+        // OR (||) is true when at least one condition is true.
+        boolean isWeekend = true;
+        boolean isHoliday = false;
+        if (isWeekend || isHoliday) {
+            System.out.println("The office is closed.");
+        }
+
         // A nested if checks a second condition inside the first condition.
         int marks = 85;
         if (marks >= 40) {

@@ -393,6 +393,19 @@ if (age >= 18 && hasId) {
 }
 ```
 
+The OR operator `||` returns `true` when at least one condition is true. It returns `false` only when both conditions are false.
+
+```java
+boolean isWeekend = true;
+boolean isHoliday = false;
+
+if (isWeekend || isHoliday) {
+	System.out.println("The office is closed.");
+}
+```
+
+This example prints `The office is closed.` because `isWeekend` is true.
+
 Java uses short-circuit evaluation. With `&&`, the second condition is checked only if the first is true. With `||`, the second condition is checked only if the first is false.
 
 ### 10.3 `if` Statement
