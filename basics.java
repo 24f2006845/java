@@ -1,6 +1,7 @@
 class Hello {
     public static void main(String a[]) 
     {
+        // Primitive data types store different kinds of simple values.
         int num1 = 10;
         int num2 = 20;
         byte by = 30;
@@ -12,18 +13,20 @@ class Hello {
         boolean bl = true;
         int sum = num1 + num2;
 
-        // Widening conversion: smaller type to larger type
+        // Widening conversion happens automatically when a smaller type
+        // is assigned to a larger compatible type.
         int wholeNumber = 100;
         double widenedNumber = wholeNumber;
 
-        // Narrowing conversion: larger type to smaller type using casting
+        // Narrowing conversion requires an explicit cast and may lose data.
         double decimalNumber = 99.99;
         int narrowedNumber = (int) decimalNumber;
 
-        // Casting can also convert between numeric types explicitly
+        // Casting explicitly converts a value to another compatible type.
         int largeValue = 130;
         byte castByte = (byte) largeValue;
 
+        // Display the values and the results of the conversions.
         System.out.println("Sum of two numbers: " + sum);
         System.out.println("Byte value: " + by);
         System.out.println("Short value: " + sh);
@@ -36,14 +39,13 @@ class Hello {
         System.out.println("Narrowed double to int: " + narrowedNumber);
         System.out.println("Cast int to byte: " + castByte);
 
+        // Relational operators compare values and return true or false.
         int age = 20;
         boolean hasId = true;
-
-        // Relational operators compare values.
         System.out.println("Age is greater than 18: " + (age > 18));
         System.out.println("Age is equal to 20: " + (age == 20));
 
-        // Logical operators combine conditions.
+        // Logical operators combine multiple boolean conditions.
         if (age >= 18 && hasId) {
             System.out.println("Allowed to enter.");
         }
@@ -54,7 +56,7 @@ class Hello {
             System.out.println("Regular ticket price.");
         }
 
-        // Nested if: an if statement inside another if statement.
+        // A nested if checks a second condition inside the first condition.
         int marks = 85;
         if (marks >= 40) {
             if (marks >= 80) {
@@ -66,7 +68,7 @@ class Hello {
             System.out.println("Failed.");
         }
 
-        // if-else if-else checks conditions from top to bottom.
+        // An if-else-if-else chain checks conditions from top to bottom.
         if (marks >= 80) {
             System.out.println("Grade: A");
         } else if (marks >= 60) {
@@ -77,7 +79,7 @@ class Hello {
             System.out.println("Grade: F");
         }
 
-        // Switch selects one block based on a value.
+        // A switch selects one block based on the value of an expression.
         int day = 2;
         switch (day) {
             case 1:
@@ -90,7 +92,7 @@ class Hello {
                 System.out.println("Another day");
         }
 
-        // Ternary operator: short form of a simple if-else.
+            // The ternary operator is a compact form of a simple if-else.
         String result = marks >= 40 ? "Pass" : "Fail";
         System.out.println("Result: " + result);
     }
