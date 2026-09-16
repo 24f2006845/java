@@ -239,6 +239,73 @@ byte -> short -> int -> long -> float -> double
 
 Narrowing conversion changes a larger type into a smaller type. It must be written explicitly because data may be lost.
 
+## 7. Loops
+
+A loop repeats a block of code while a condition is true. Loops reduce repeated code and are useful for processing numbers, arrays, and other collections.
+
+### 7.1 `for` Loop
+
+Use a `for` loop when you know the starting value, stopping condition, and update step. Its syntax is:
+
+```java
+for (initialization; condition; update) {
+	// Code to repeat
+}
+```
+
+The initialization runs once. Before every repetition, Java checks the condition. After the body runs, Java performs the update.
+
+```java
+for (int number = 1; number <= 5; number++) {
+	System.out.println(number);
+}
+```
+
+This prints the numbers from 1 through 5. The loop stops when `number <= 5` becomes false.
+
+### 7.2 `while` Loop
+
+Use a `while` loop when the number of repetitions may not be known in advance. The condition is checked before the body, so the body may run zero times.
+
+```java
+int number = 1;
+while (number <= 5) {
+	System.out.println(number);
+	number++;
+}
+```
+
+The loop variable must be updated inside the loop when it controls the condition. Otherwise, the loop may never end.
+
+### 7.3 `do-while` Loop
+
+Use a `do-while` loop when the body must run at least once. The condition is checked after the body.
+
+```java
+int choice;
+do {
+	System.out.println("Show the menu");
+	choice = 0; // Replace this with input in a real program.
+} while (choice != 0);
+```
+
+Even if the condition is false after the first run, the body has already executed once. The `do-while` statement ends with a semicolon.
+
+### 7.4 Choosing a Loop
+
+| Loop | Condition checked | Best used when |
+|---|---|---|
+| `for` | Before each repetition | The number of repetitions is known |
+| `while` | Before each repetition | The loop may run zero or more times |
+| `do-while` | After each repetition | The loop must run at least once |
+
+### 7.5 Loop Control Statements
+
+- `break` immediately exits the loop.
+- `continue` skips the rest of the current repetition and starts the next one.
+
+Use these statements carefully so the loop remains easy to understand.
+
 ```java
 double price = 19.99;
 int wholePrice = (int) price;  // 19
