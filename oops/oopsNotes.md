@@ -185,3 +185,82 @@ This means: use the object `calc` and call its `add` method.
 - Java creates memory for object automatically when `new` is used
 
 This is the basic idea of OOP in Java.
+
+## 12. What is a method in Java?
+A method is a block of code that performs a specific task. Methods help us reuse code instead of writing the same logic repeatedly.
+
+Basic syntax:
+```java
+accessModifier returnType methodName(parameters) {
+    // code to execute
+    return value;
+}
+```
+
+Example:
+```java
+class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+In this example:
+- `public` = access modifier
+- `int` = return type
+- `add` = method name
+- `int a, int b` = parameters
+- `return a + b` = value returned by the method
+
+A method can also return nothing. In that case, use `void`:
+```java
+public void greet() {
+    System.out.println("Hello");
+}
+```
+
+## 13. Method overloading
+Method overloading means having multiple methods with the same name in the same class, but with different parameter lists.
+
+The parameters must differ by:
+- number of parameters
+- type of parameters
+- order of parameter types
+
+Example:
+```java
+class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+
+    int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    double add(double a, double b) {
+        return a + b;
+    }
+}
+```
+
+Calling the overloaded methods:
+```java
+Calculator calc = new Calculator();
+
+System.out.println(calc.add(2, 3));       // 5
+System.out.println(calc.add(2, 3, 4));    // 9
+System.out.println(calc.add(2.5, 3.5));   // 6.0
+```
+
+Important rule:
+- Changing only the return type is not method overloading.
+
+For example, these methods are invalid because their parameters are the same:
+```java
+int calculate(int number) { return number; }
+double calculate(int number) { return number; }
+```
+
+Method overloading is also called compile-time polymorphism because Java decides which method to call during compilation based on the arguments.
