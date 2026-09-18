@@ -254,6 +254,94 @@ System.out.println(calc.add(2, 3, 4));    // 9
 System.out.println(calc.add(2.5, 3.5));   // 6.0
 ```
 
+Complete example:
+```java
+class Printer {
+    void print(String message) {
+        System.out.println("Text: " + message);
+    }
+
+    void print(int number) {
+        System.out.println("Number: " + number);
+    }
+
+    void print(String message, int copies) {
+        for (int i = 1; i <= copies; i++) {
+            System.out.println(message);
+        }
+    }
+}
+
+class Demo {
+    public static void main(String[] args) {
+        Printer printer = new Printer();
+
+        printer.print("Hello");       // calls print(String)
+        printer.print(25);            // calls print(int)
+        printer.print("Java", 2);     // calls print(String, int)
+    }
+}
+```
+
+Output:
+```text
+Text: Hello
+Number: 25
+Java
+Java
+```
+
+## 14. Why method overloading helps
+Method overloading helps because:
+- we can use one meaningful method name for similar tasks
+- code becomes easier to read and remember
+- users of a class do not need different names such as `printText`, `printNumber`, and `printMany`
+- it provides flexibility for different input types or different numbers of inputs
+
+Without overloading, we might write:
+```java
+void printText(String message) { }
+void printNumber(int number) { }
+void printMany(String message, int copies) { }
+```
+
+With overloading, all related actions can use the name `print`.
+
+## 15. Common mistakes in method overloading
+
+### Mistake 1: Changing only the return type
+This is not allowed:
+```java
+int getValue() {
+    return 10;
+}
+
+double getValue() {       // Error: same parameters
+    return 10.5;
+}
+```
+
+The parameter list must change. Java does not choose a method using only its return type.
+
+### Mistake 2: Using the same parameter list
+These methods are duplicates:
+```java
+void show(int number) { }
+void show(int value) { }   // Error: parameter name does not matter
+```
+
+Changing `number` to `value` does not create overloading. The parameter type and number are still the same.
+
+### Mistake 3: Passing arguments that do not match
+If no overloaded method can accept the arguments, Java shows a compilation error:
+```java
+Calculator calc = new Calculator();
+calc.add("2", "3");       // Error: no add method accepts two String values
+```
+
+### Mistake 4: Making overloads confusing
+Overloads should perform related tasks. Avoid using the same method name for completely different behavior because it makes the code difficult to understand.
+
 Important rule:
 - Changing only the return type is not method overloading.
 
