@@ -1,3 +1,4 @@
+package Basics;
 public class loops {
 	public static void main(String[] args) {
 		// A for loop is useful when the number of repetitions is known.
