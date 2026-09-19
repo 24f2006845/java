@@ -373,3 +373,46 @@ numbers = new int[]{1, 2, 3};
 
 Use `.length` for arrays, `.length()` for `String`, and `.size()` for
 collections such as `ArrayList`.
+
+## Drawbacks of Arrays
+
+Arrays are useful for fixed-size data, but they also have limitations:
+
+- **Fixed size:** The length cannot change after the array is created.
+- **Expensive insertion and removal:** Adding or removing an element may
+	require creating a new array and copying the existing values.
+- **Same data type:** An array normally stores values of one declared type.
+- **Index errors:** Accessing an invalid index causes an
+	`ArrayIndexOutOfBoundsException`.
+- **Possible wasted memory:** A large array may contain unused positions when
+	the exact number of values is not known.
+- **Limited built-in operations:** Arrays do not provide methods for searching,
+	sorting, or resizing. Use `java.util.Arrays` for many utility operations.
+- **Manual size management:** The programmer must track the number of used
+	elements when an array is only partly filled.
+
+Example of a partly filled array:
+
+```java
+int[] numbers = new int[5];
+int used = 0;
+
+numbers[used++] = 10;
+numbers[used++] = 20;
+
+for (int index = 0; index < used; index++) {
+		System.out.println(numbers[index]);
+}
+```
+
+Use `ArrayList` when the collection needs to grow, shrink, or frequently
+insert and remove values:
+
+```java
+import java.util.ArrayList;
+
+ArrayList<Integer> numbers = new ArrayList<>();
+numbers.add(10);
+numbers.add(20);
+numbers.remove(0);
+```
