@@ -120,14 +120,150 @@ for (int row = 0; row < table.length; row++) {
 }
 ```
 
-Rows can have different lengths because Java supports jagged arrays:
+## Jagged Arrays
+
+A jagged array is a two-dimensional array whose rows can have different
+lengths. Java creates the outer array first, and each row is created separately.
+This can save space when each row needs a different number of values.
+
+### Creating a Jagged Array
 
 ```java
-int[][] jagged = new int[3][];
-jagged[0] = new int[2];
-jagged[1] = new int[4];
-jagged[2] = new int[1];
+int[][] jagged = new int[3][]; // 3 row references; rows are not created yet
+
+jagged[0] = new int[2]; // row 0 has indexes 0-1
+jagged[1] = new int[4]; // row 1 has indexes 0-3
+jagged[2] = new int[1]; // row 2 has index 0
 ```
+
+The rows can also be initialized directly:
+
+```java
+int[][] marks = {
+	{80, 90},
+	{75, 85, 95},
+	{88}
+};
+```
+
+Access an element with two indexes. The first index selects the row and the
+second index selects a value inside that row:
+
+```java
+System.out.println(marks[0][1]); // 90
+marks[1][0] = 78;                 // changes the first value in row 1
+System.out.println(marks.length);    // 3 rows
+System.out.println(marks[1].length); // 3 values in row 1
+```
+
+Use `row.length` rather than one shared column count when traversing a jagged
+array:
+
+```java
+for (int row = 0; row < marks.length; row++) {
+	for (int column = 0; column < marks[row].length; column++) {
+		System.out.print(marks[row][column] + " ");
+	}
+	System.out.println();
+}
+```
+
+### Uses of Jagged Arrays
+
+Jagged arrays are useful when groups do not all contain the same number of
+values:
+
+```java
+// Each student has completed a different number of assignments.
+int[][] assignmentScores = {
+	{90, 85, 88},
+	{76, 81},
+	{95, 91, 89, 93}
+};
+```
+
+Other examples include a calendar where months have different numbers of days,
+seating rows with different capacities, and graph adjacency lists where each
+vertex has a different number of neighbors.
+
+## Uses and Benefits of Arrays
+
+### One-Dimensional Arrays
+
+Use a one-dimensional array for a fixed-size sequence of related values.
+
+```java
+int[] temperatures = {18, 21, 24, 20, 17};
+int total = 0;
+
+for (int temperature : temperatures) {
+	total += temperature;
+}
+
+double average = (double) total / temperatures.length;
+System.out.println("Average: " + average);
+```
+
+Benefits include:
+
+- Fast access by index: `temperatures[2]` is direct access.
+- Low memory overhead compared with many collection types.
+- A fixed size makes the number of elements predictable.
+- Easy traversal with `for` and enhanced `for` loops.
+
+Common uses include scores, prices, IDs, sensor readings, and lookup tables.
+
+### Multidimensional Arrays
+
+Use a regular multidimensional array when data naturally forms rows and
+columns, such as a seating chart or a board:
+
+```java
+char[][] board = {
+	{'X', 'O', 'X'},
+	{'O', 'X', 'O'},
+	{' ', ' ', 'X'}
+};
+
+board[2][0] = 'O';
+System.out.println(board[2][0]); // O
+```
+
+Benefits include:
+
+- Clear row-and-column indexing such as `board[row][column]`.
+- Natural representation of tables, grids, and matrices.
+- Efficient storage when every row has the same length.
+- Simple nested-loop processing.
+
+### Jagged Arrays
+
+Use a jagged array when rows contain different amounts of data:
+
+```java
+String[][] seating = {
+	{"A1", "A2", "A3"},
+	{"B1", "B2"},
+	{"C1", "C2", "C3", "C4"}
+};
+```
+
+Benefits include:
+
+- Avoiding unused cells in rows of different sizes.
+- Flexible row sizes that can match the data.
+- Natural representation of grouped or irregular data.
+
+### Important Limitations
+
+- An array has a fixed size after it is created.
+- All elements must have the same declared type.
+- Indexes must be checked carefully to avoid exceptions.
+- Inserting or removing an element requires creating a new array and copying
+  values.
+
+Use `ArrayList` when the number of elements changes often, or when convenient
+insertion and removal are more important than direct array access.
 
 ## `java.util.Arrays` Methods
 

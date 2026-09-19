@@ -10,6 +10,10 @@ public class Array {
         for (int number : numbers) {
             System.out.println(number);
         }
+        JaggedArray jaggedArray = new JaggedArray();
+        jaggedArray.main(args);
+        CreateJaggedArray createJaggedArray = new CreateJaggedArray();
+        createJaggedArray.main(args);
     }
 }
 
@@ -44,6 +48,46 @@ class multidimensionalArray2 {
         for (int i = 0; i < multiArray.length; i++) {
             for (int j = 0; j < multiArray[i].length; j++) {
                 System.out.print(multiArray[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+
+class JaggedArray {
+    public static void main(String[] args) {
+        int[][] jaggedArray = new int[3][];
+        jaggedArray[0] = new int[]{1, 2};
+        jaggedArray[1] = new int[]{3, 4, 5};
+        jaggedArray[2] = new int[]{6};
+
+        System.out.println("Jagged Array elements:");
+        for (int i = 0; i < jaggedArray.length; i++) {
+            for (int j = 0; j < jaggedArray[i].length; j++) {
+                System.out.print(jaggedArray[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+
+class CreateJaggedArray {
+    public static void main(String[] args) {
+        int JaggestArray[][] = new int[3][];
+        JaggestArray[0] = new int[2];
+        JaggestArray[1] = new int[4];
+        JaggestArray[2] = new int[3];
+
+        for (int i = 0; i < JaggestArray.length; i++) {
+            for (int j = 0; j < JaggestArray[i].length; j++) {
+                JaggestArray[i][j] = (int)(Math.random() * 100); // Assign random values between 0 and 99
+            }
+        }
+        System.out.println("Jagged Array elements:");
+        for (int i = 0; i < JaggestArray.length; i++) {
+            for (int j = 0; j < JaggestArray[i].length; j++) {
+                System.out.print(JaggestArray[i][j] + " ");
             }
             System.out.println();
         }
