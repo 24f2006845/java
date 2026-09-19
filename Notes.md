@@ -1,5 +1,100 @@
 # Java Notes
 
+## Enhanced `for` Loop
+
+The enhanced `for` loop, also called the `for-each` loop, visits each element
+of an array or collection in order.
+
+### Syntax
+
+```java
+for (Type variable : arrayOrCollection) {
+	// use variable
+}
+```
+
+The loop assigns one element at a time to the loop variable:
+
+```java
+int[] numbers = {10, 20, 30, 40};
+
+for (int number : numbers) {
+	System.out.println(number);
+}
+```
+
+Output:
+
+```text
+10
+20
+30
+40
+```
+
+### When to Use It
+
+Use an enhanced `for` loop when:
+
+- Every element should be visited.
+- The index is not needed.
+- The array or collection should be read clearly and simply.
+
+It also works with other types:
+
+```java
+String[] names = {"Ana", "Ben", "Chris"};
+
+for (String name : names) {
+	System.out.println("Hello, " + name);
+}
+```
+
+### Compared with a Traditional `for` Loop
+
+Use a traditional `for` loop when the index is needed:
+
+```java
+int[] numbers = {10, 20, 30};
+
+for (int index = 0; index < numbers.length; index++) {
+	System.out.println("Index " + index + ": " + numbers[index]);
+}
+```
+
+The enhanced version is shorter, but it does not directly provide the index:
+
+```java
+for (int number : numbers) {
+	System.out.println(number);
+}
+```
+
+### Updating Elements
+
+Changing the loop variable does not update a primitive array:
+
+```java
+int[] numbers = {1, 2, 3};
+
+for (int number : numbers) {
+	number *= 2;
+}
+
+// numbers is still {1, 2, 3}
+```
+
+To update array elements, use their indexes:
+
+```java
+for (int index = 0; index < numbers.length; index++) {
+	numbers[index] *= 2;
+}
+```
+
+The enhanced `for` loop is also called a `for-each` loop because it performs an
+operation for each element.
+
 ## 1. What Is Java?
 
 Java is a high-level, object-oriented programming language. Java programs are compiled into **bytecode**, which can run on any system that has a compatible Java Runtime Environment (JRE).

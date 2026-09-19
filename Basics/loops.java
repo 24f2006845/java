@@ -26,5 +26,13 @@ public class loops {
 			System.out.println("Attempt: " + attempt);
 			attempt++;
 		} while (attempt <= 3);
+
+		// An enhanced for loop visits every element in an array or collection.
+		// It is useful when the index is not needed.
+		System.out.println("\nEnhanced for loop:");
+		int[] numbers = {10, 20, 30, 40};
+		for (int number : numbers) {
+			System.out.println("Number: " + number);
+		}
 	}
 }
