@@ -1,0 +1,239 @@
+# Java Arrays
+
+An array stores a fixed number of values of the same type. Array positions are
+zero-indexed, so the first element is at index `0` and the last element is at
+index `length - 1`.
+
+## Creating Arrays
+
+```java
+// Declare a reference (no array has been created yet)
+int[] numbers;
+
+// Create an array with a fixed size. Values get default values.
+numbers = new int[5];       // [0, 0, 0, 0, 0]
+
+// Declare and create in one statement
+int[] scores = new int[3];
+
+// Create with initial values
+int[] values = {10, 20, 30, 40};
+int[] otherValues = new int[]{10, 20, 30, 40};
+
+// Other common types
+String[] names = {"Ana", "Ben"};
+boolean[] flags = new boolean[2];
+char[] letters = {'A', 'B', 'C'};
+```
+
+The size cannot be changed after creation. To store a resizable collection,
+use `ArrayList` instead.
+
+## Default Values
+
+When an array is created with `new`, every element receives a default value:
+
+| Type | Default |
+| --- | --- |
+| Numeric primitives (`byte`, `short`, `int`, `long`, `float`, `double`) | `0` (or `0.0`) |
+| `char` | `\\u0000` |
+| `boolean` | `false` |
+| Reference types such as `String` | `null` |
+
+## Indexing and Updating
+
+```java
+int[] numbers = {10, 20, 30};
+
+int first = numbers[0];       // 10
+int last = numbers[numbers.length - 1]; // 30
+numbers[1] = 99;              // [10, 99, 30]
+
+System.out.println(numbers.length); // 3; length is a field, not a method
+```
+
+Valid indexes are from `0` through `array.length - 1`. An invalid index throws
+`ArrayIndexOutOfBoundsException`.
+
+## Traversing an Array
+
+### Traditional `for` loop
+
+Use this when the index is needed or when changing elements.
+
+```java
+int[] numbers = {1, 2, 3, 4, 5};
+
+for (int index = 0; index < numbers.length; index++) {
+	System.out.println("index " + index + ": " + numbers[index]);
+	numbers[index] *= 2;
+}
+```
+
+### Enhanced `for` loop
+
+Use this for reading every element when the index is not needed.
+
+```java
+for (int number : numbers) {
+	System.out.println(number);
+}
+```
+
+Changing `number` does not change the array. For objects, the loop variable is
+a copy of the reference, not a replacement for the array element.
+
+## Multidimensional Arrays
+
+Java multidimensional arrays are arrays containing other arrays.
+
+```java
+// 2 rows and 3 columns
+int[][] matrix = new int[2][3];
+
+matrix[0][0] = 1;
+matrix[0][1] = 2;
+matrix[1][2] = 6;
+
+System.out.println(matrix.length);       // number of rows: 2
+System.out.println(matrix[0].length);    // columns in row 0: 3
+System.out.println(matrix[1][2]);        // 6
+```
+
+Initialize directly:
+
+```java
+int[][] table = {
+	{1, 2, 3},
+	{4, 5, 6}
+};
+```
+
+Nested loops visit every value:
+
+```java
+for (int row = 0; row < table.length; row++) {
+	for (int column = 0; column < table[row].length; column++) {
+		System.out.print(table[row][column] + " ");
+	}
+	System.out.println();
+}
+```
+
+Rows can have different lengths because Java supports jagged arrays:
+
+```java
+int[][] jagged = new int[3][];
+jagged[0] = new int[2];
+jagged[1] = new int[4];
+jagged[2] = new int[1];
+```
+
+## `java.util.Arrays` Methods
+
+Arrays themselves have no methods. Import the utility class for common array
+operations:
+
+```java
+import java.util.Arrays;
+```
+
+### Print an array: `toString`
+
+```java
+int[] numbers = {3, 1, 2};
+System.out.println(Arrays.toString(numbers)); // [3, 1, 2]
+```
+
+For nested arrays use `deepToString`:
+
+```java
+System.out.println(Arrays.deepToString(table)); // [[1, 2, 3], [4, 5, 6]]
+```
+
+### Compare arrays: `equals` and `deepEquals`
+
+```java
+int[] first = {1, 2, 3};
+int[] second = {1, 2, 3};
+
+System.out.println(Arrays.equals(first, second)); // true
+System.out.println(first == second);              // false: compares references
+System.out.println(Arrays.deepEquals(new int[][]{{1}}, new int[][]{{1}}));
+```
+
+Use `equals` for one-dimensional arrays and `deepEquals` for nested arrays.
+
+### Sort: `sort`
+
+```java
+int[] numbers = {4, 1, 3, 2};
+Arrays.sort(numbers); // [1, 2, 3, 4]
+```
+
+Sort part of an array with the range `fromIndex` (inclusive) and `toIndex`
+(exclusive):
+
+```java
+Arrays.sort(numbers, 1, 3); // sorts indexes 1 and 2 only
+```
+
+### Search: `binarySearch`
+
+The array must be sorted first. The method returns the index when found. If it
+is not found, it returns a negative value.
+
+```java
+int[] numbers = {1, 2, 3, 4, 5};
+int index = Arrays.binarySearch(numbers, 4); // 3
+```
+
+### Fill: `fill`
+
+```java
+int[] numbers = new int[4];
+Arrays.fill(numbers, 7); // [7, 7, 7, 7]
+Arrays.fill(numbers, 1, 3, 9); // indexes 1 and 2 become 9
+```
+
+### Copy: `copyOf` and `copyOfRange`
+
+```java
+int[] original = {1, 2, 3};
+int[] larger = Arrays.copyOf(original, 5);       // [1, 2, 3, 0, 0]
+int[] part = Arrays.copyOfRange(original, 1, 3); // [2, 3]
+```
+
+Both methods create a new array. The end index in `copyOfRange` is exclusive.
+
+### Other useful methods
+
+```java
+Arrays.setAll(numbers, index -> index * 10); // calculate each value
+Arrays.parallelSort(numbers);                // parallel sort for large arrays
+Arrays.parallelPrefix(numbers, (a, b) -> a + b); // cumulative operation
+```
+
+`Arrays.asList` works with reference-type arrays, not primitive arrays:
+
+```java
+String[] names = {"Ana", "Ben"};
+System.out.println(Arrays.asList(names)); // [Ana, Ben]
+```
+
+For `int[]`, `Arrays.asList(numbers)` creates a list containing the whole
+`int[]` as one item. Use `Arrays.stream(numbers)` when working with primitive
+arrays and streams.
+
+## Common Errors
+
+```java
+int[] numbers = new int[3];
+// numbers[3] = 10;       // Error: valid indexes are 0, 1, and 2
+// numbers.length();      // Error: length is not a method
+// numbers = {1, 2, 3};   // Error outside a declaration
+numbers = new int[]{1, 2, 3};
+```
+
+Use `.length` for arrays, `.length()` for `String`, and `.size()` for
+collections such as `ArrayList`.
