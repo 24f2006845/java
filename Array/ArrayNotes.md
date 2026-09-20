@@ -40,6 +40,54 @@ When an array is created with `new`, every element receives a default value:
 | `boolean` | `false` |
 | Reference types such as `String` | `null` |
 
+## Arrays of Objects
+
+An array of objects stores references to objects, not the complete objects
+inside each array position. Creating the array creates the array itself, but it
+does not automatically create an object for every position.
+
+```java
+Student[] students = new Student[2];
+
+// The array has two slots, but both slots initially contain null.
+System.out.println(students[0]); // null
+
+students[0] = new Student("Ana"); // creates a Student object
+students[1] = new Student("Ben"); // creates another Student object
+```
+
+The variable `students[0]` contains a reference that points to the `Student`
+object. The object is created by `new Student(...)`, not by `new Student[2]`.
+The array stores those references:
+
+```java
+Student firstStudent = new Student("Ana");
+Student[] students = {firstStudent, null};
+
+// Both variables refer to the same Student object.
+firstStudent.setName("Anita");
+System.out.println(students[0].getName()); // Anita
+
+// This replaces the reference in the array; it does not change the old object.
+students[0] = new Student("Alex");
+System.out.println(firstStudent.getName()); // Anita
+System.out.println(students[0].getName());  // Alex
+```
+
+For an object array, remember:
+
+- `new Student[2]` creates two reference slots and fills them with `null`.
+- `new Student("Ana")` creates one actual `Student` object.
+- `students[0].setName(...)` changes the object referenced by index `0`.
+- `students[0] = anotherStudent` changes which object index `0` references.
+- Accessing a method or field through a `null` element throws
+	`NullPointerException`.
+
+The same rule applies to arrays of `String`, wrapper classes, and any other
+class type. Strings are objects too, so `String[] names = new String[2]`
+creates an array of two `null` references; it does not create two `String`
+objects.
+
 ## Indexing and Updating
 
 ```java
