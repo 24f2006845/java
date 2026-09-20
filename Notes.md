@@ -782,6 +782,77 @@ Person person = new Person("Ana");
 Person.printName(person); // Ana
 ```
 
+### 11.3.1 Static Method vs Non-Static Method
+
+A non-static method is also called an instance method. The main difference is
+which object the method belongs to and whether an object is required to call it.
+
+```java
+class Counter {
+	static int totalCounters = 0; // shared by the class
+	int value = 0;                 // separate for each object
+
+	static void showTotalCounters() {
+		System.out.println(totalCounters); // static method uses static data
+	}
+
+	void increaseValue() {
+		value++;                           // instance method uses object data
+	}
+}
+
+Counter first = new Counter();
+Counter second = new Counter();
+Counter.totalCounters = 2;
+
+Counter.showTotalCounters(); // call static method with the class name
+first.increaseValue();       // call non-static method with an object
+second.increaseValue();
+```
+
+| Feature | Static method | Non-static method |
+| --- | --- | --- |
+| Belongs to | The class | An object, or instance |
+| Called with | `ClassName.method()` | `object.method()` |
+| Needs an object? | No | Yes |
+| Directly accesses static members? | Yes | Yes |
+| Directly accesses instance members? | No | Yes |
+| Can use `this` or `super`? | No | Yes |
+| State used | Shared class-level state | The selected object's state |
+| Typical use | Utility operations and shared behavior | Behavior depending on object data |
+
+A static method can still work with an object if that object is passed as a
+parameter. It cannot use instance data automatically because it has no implicit
+`this` object:
+
+```java
+class Message {
+	String text;
+
+	Message(String text) {
+		this.text = text;
+	}
+
+	// Static method: the object must be supplied explicitly.
+	static void printMessage(Message message) {
+		System.out.println(message.text);
+	}
+
+	// Non-static method: this.text refers to the current object.
+	void printOwnMessage() {
+		System.out.println(this.text);
+	}
+}
+
+Message message = new Message("Hello");
+Message.printMessage(message); // static call with an argument
+message.printOwnMessage();     // instance call on the object
+```
+
+Use a static method when the operation does not depend on one object's state,
+such as `Math.max(10, 20)`. Use a non-static method when the operation needs
+the fields of a particular object, such as `message.printOwnMessage()`.
+
 ### 11.4 `void` Methods
 
 `void` is a return type that means a method does not return a value. It can
