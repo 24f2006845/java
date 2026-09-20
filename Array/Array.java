@@ -14,6 +14,26 @@ public class Array {
         jaggedArray.main(args);
         CreateJaggedArray createJaggedArray = new CreateJaggedArray();
         createJaggedArray.main(args);
+
+
+        student s1 = new student();
+        s1.marks = 90;
+        s1.name = "John";
+        s1.age = 20;    
+        
+        student s2 = new student();
+        s2.marks = 85;
+        s2.name = "Alice";
+        s2.age = 22;
+
+
+        student StudentArray[] = new student[2];
+        StudentArray[0] = s1;
+        StudentArray[1] = s2;
+        System.out.println("Student Array elements:");
+        for (student student : StudentArray) {
+            System.out.println("Name: " + student.name + ", Age: " + student.age + ", Marks: " + student.marks);
+        }
     }
 }
 
@@ -93,3 +113,10 @@ class CreateJaggedArray {
         }
     }
 }
+
+class student {
+    int marks;
+    String name;
+    int age;
+}
+
