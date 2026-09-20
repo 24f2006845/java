@@ -672,3 +672,261 @@ System.out.println(result);
 ```
 
 Use the ternary operator for short expressions. Use `if-else` when the logic has multiple statements or is harder to read.
+
+## 11. `static` Keyword and `void` Methods
+
+The `static` keyword means that a member belongs to the class itself instead of
+belonging to each individual object. A static member can be used through the
+class name, without creating an object.
+
+### 11.1 Static Variables
+
+A static variable has one shared copy for the whole class. Every object of that
+class sees the same value.
+
+```java
+class Student {
+	// One shared counter for all Student objects.
+	static int studentCount = 0;
+
+	Student() {
+		studentCount++;
+	}
+}
+
+Student first = new Student();
+Student second = new Student();
+
+System.out.println(Student.studentCount); // 2
+```
+
+Use a static variable for class-level data that should be shared. A normal
+instance variable gets a separate copy inside every object:
+
+```java
+class Account {
+	static String bankName = "ABC Bank"; // shared by all accounts
+	double balance;                     // different for each account
+}
+```
+
+### 11.2 Static Constants
+
+Constants are commonly declared with both `static` and `final`:
+
+```java
+class MathValues {
+	static final double PI = 3.14159;
+	static final int DAYS_IN_WEEK = 7;
+}
+
+System.out.println(MathValues.PI);
+```
+
+`final` prevents the variable from being assigned a new value after it is
+initialized. Constant names are conventionally written in uppercase with
+underscores.
+
+### 11.3 Static Methods
+
+A static method belongs to the class and can be called using the class name.
+It does not require an object:
+
+```java
+class Calculator {
+	static int add(int first, int second) {
+		return first + second;
+	}
+}
+
+int total = Calculator.add(10, 20);
+System.out.println(total); // 30
+```
+
+Static methods can directly access static variables and call other static
+methods. They cannot directly access instance variables or instance methods,
+because no particular object is selected:
+
+```java
+class Example {
+	int instanceNumber = 10;
+	static int sharedNumber = 20;
+
+	static void showValues() {
+		System.out.println(sharedNumber); // valid
+		// System.out.println(instanceNumber); // Error: no object selected
+	}
+
+	void printInstanceNumber() {
+		System.out.println(instanceNumber); // valid in an instance method
+	}
+}
+```
+
+An object reference is needed when a static method must use instance data:
+
+```java
+class Person {
+	String name;
+
+	Person(String name) {
+		this.name = name;
+	}
+
+	static void printName(Person person) {
+		System.out.println(person.name); // use the supplied object
+	}
+}
+
+Person person = new Person("Ana");
+Person.printName(person); // Ana
+```
+
+### 11.4 `void` Methods
+
+`void` is a return type that means a method does not return a value. It can
+perform an action, such as printing or changing an object.
+
+```java
+class Printer {
+	void printMessage() {
+		System.out.println("Hello");
+		// No return value is needed.
+	}
+
+	static void printLine(String text) {
+		System.out.println(text);
+	}
+}
+
+Printer printer = new Printer();
+printer.printMessage();
+Printer.printLine("Java");
+```
+
+A `void` method can use `return;` to stop early, but it cannot return a value:
+
+```java
+static void printIfPositive(int number) {
+	if (number <= 0) {
+		return; // exit the method early
+	}
+
+	System.out.println(number);
+}
+```
+
+Do not write `return number;` inside a `void` method. A method that returns a
+value must declare that value's type:
+
+```java
+static int square(int number) {
+	return number * number;
+}
+```
+
+### 11.5 The Static `main` Method
+
+The JVM starts a traditional Java application by calling this method:
+
+```java
+public static void main(String[] args) {
+	System.out.println("Program started");
+}
+```
+
+Each keyword has a purpose:
+
+| Part | Meaning |
+| --- | --- |
+| `public` | The JVM can access the method from outside the class |
+| `static` | The JVM can call it without creating an object |
+| `void` | The method does not return a value to the JVM |
+| `main` | The conventional application entry-point name |
+| `String[] args` | Command-line arguments passed to the program |
+
+Example using command-line arguments:
+
+```java
+public class Greeting {
+	public static void main(String[] args) {
+		if (args.length > 0) {
+			System.out.println("Hello, " + args[0]);
+		} else {
+			System.out.println("Hello, Java");
+		}
+	}
+}
+```
+
+Run it with:
+
+```bash
+javac Greeting.java
+java Greeting Ana
+```
+
+Output:
+
+```text
+Hello, Ana
+```
+
+### 11.6 Static Blocks
+
+A static block runs once when the class is loaded, before `main` or other
+static members are used. It is useful for class-level initialization:
+
+```java
+class Configuration {
+	static String environment;
+
+	static {
+		// This block runs once when Configuration is loaded.
+		environment = "development";
+	}
+}
+
+System.out.println(Configuration.environment); // development
+```
+
+### 11.7 Static Nested Classes
+
+A class declared inside another class can also be static. A static nested class
+does not need an object of the outer class:
+
+```java
+class Outer {
+	static class Helper {
+		static void show() {
+			System.out.println("Helper method");
+		}
+	}
+}
+
+Outer.Helper.show();
+```
+
+### 11.8 Important Rules and Common Mistakes
+
+- Access static members with the class name, such as `Math.max(4, 8)`.
+- Avoid using an object reference to access a static member; it can confuse
+	readers because the member belongs to the class.
+- A static method cannot use `this` or `super`, because they refer to an
+	instance and a static method may run without one.
+- Static methods cannot directly access instance fields or call instance
+	methods.
+- Static data is shared, so changing it through one object affects the whole
+	class.
+- Use instance members when each object needs its own state.
+- Use `void` when a method performs an action and has no result to give back.
+- Use a value-returning type when the caller needs a result.
+
+### Static vs Instance Members
+
+| Member | Belongs to | Accessed with | Copies |
+| --- | --- | --- | --- |
+| Static variable | The class | `ClassName.variable` | One shared copy |
+| Static method | The class | `ClassName.method()` | One class-level method |
+| Instance variable | An object | `object.variable` | One copy per object |
+| Instance method | An object | `object.method()` | Uses a specific object's state |
