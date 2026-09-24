@@ -39,6 +39,14 @@ Java bytecode (.class)
 Machine code executed by the computer
 ```
 
+```mermaid
+flowchart LR
+    A[Write Java code] --> B[javac compiles]
+    B --> C[Bytecode .class]
+    C --> D[JVM loads and runs]
+    D --> E[Program output]
+```
+
 Example:
 
 ```java
@@ -151,6 +159,19 @@ Reference types store a reference to an object instead of the object value itsel
 - Interfaces
 - String
 - Enums
+
+```mermaid
+flowchart TB
+    A[Java Data Types] --> B[Primitive Types]
+    A --> C[Reference Types]
+    B --> D[byte, short, int, long]
+    B --> E[float, double]
+    B --> F[char, boolean]
+    C --> G[String]
+    C --> H[Array]
+    C --> I[Class/Object]
+    C --> J[Interface]
+```
 
 ```java
 String name = "Alex";
@@ -399,6 +420,15 @@ if (marks >= 40) {
 }
 ```
 
+```mermaid
+flowchart TD
+    A[Start] --> B{marks >= 40?}
+    B -- Yes --> C[Print "Passed"]
+    B -- No --> D[Print "Failed"]
+    C --> E[End]
+    D --> E
+```
+
 Multiple conditions can be handled with else if:
 
 ```java
@@ -514,6 +544,15 @@ do {
 | for | Before each repetition | The number of repetitions is known |
 | while | Before each repetition | The loop may run zero or more times |
 | do-while | After each repetition | The loop must run at least once |
+
+```mermaid
+flowchart TD
+    A[Need repetition?] --> B{How many times?}
+    B -- Known --> C[Use for loop]
+    B -- Unknown / may vary --> D{Should run at least once?}
+    D -- Yes --> E[Use do-while loop]
+    D -- No --> F[Use while loop]
+```
 
 ---
 
@@ -666,6 +705,15 @@ Outer.Helper.show();
 | Instance variable | Object | object.variable | One copy per object |
 | Instance method | Object | object.method() | Uses an object's state |
 
+```mermaid
+flowchart TD
+    A[Class Members] --> B{Need one shared value for all objects?}
+    B -- Yes --> C[Use static]
+    B -- No --> D[Use instance]
+    C --> E[Static variable / method]
+    D --> F[Instance variable / method]
+```
+
 ---
 
 ## 8. Enhanced for Loop
@@ -678,6 +726,15 @@ The enhanced for loop, also called the for-each loop, visits each element of an 
 for (Type variable : arrayOrCollection) {
     // use variable
 }
+```
+
+```mermaid
+flowchart LR
+    A[Start] --> B[Take first element]
+    B --> C{More elements?}
+    C -- Yes --> D[Process current element]
+    D --> B
+    C -- No --> E[Stop]
 ```
 
 Example:
