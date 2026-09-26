@@ -296,16 +296,36 @@ System.out.println(empty.length()); // 0
 | `equalsIgnoreCase(value)` | Compares contents without case |
 | `compareTo(value)` | Compares strings lexicographically |
 | `contains(value)` | Checks whether text exists |
-| `indexOf(value)` | Finds the first index, or `-1` |
+| `indexOf(value)` / `lastIndexOf(value)` | Finds the first or last index, or `-1` |
 | `startsWith(value)` / `endsWith(value)` | Checks text at the beginning or end |
 | `toUpperCase()` / `toLowerCase()` | Changes letter case in a new String |
 | `trim()` / `strip()` | Removes whitespace at both ends |
-| `replace(old, new)` | Replaces characters or literal text |
+| `stripLeading()` / `stripTrailing()` | Removes whitespace from one end |
+| `replace(old, new)` | Replaces every matching character or literal sequence |
+| `replaceFirst(regex, replacement)` | Replaces the first regular-expression match |
+| `replaceAll(regex, replacement)` | Replaces every regular-expression match |
 | `split(regex)` | Breaks a string into a `String[]` |
+| `String.join(delimiter, values)` | Combines values with a delimiter |
 | `concat(value)` | Appends another string |
 | `isEmpty()` / `isBlank()` | Checks empty or whitespace-only text |
 | `String.valueOf(value)` | Converts a value to a String |
 | `String.format(format, values)` | Creates formatted text |
+
+## StringBuilder Method Reference
+
+`StringBuilder` is mutable, so these methods change the same builder object.
+Use `toString()` when the final immutable `String` is ready.
+
+| Method | Purpose |
+| --- | --- |
+| `append(value)` | Adds text at the end |
+| `insert(index, value)` | Inserts text at an index |
+| `replace(start, end, value)` | Replaces a range; end is exclusive |
+| `delete(start, end)` | Deletes a range; end is exclusive |
+| `setCharAt(index, character)` | Changes one character |
+| `reverse()` | Reverses the characters |
+| `length()` | Returns the current character count |
+| `toString()` | Converts the builder to an immutable `String` |
 
 ## Naming Note for This Project
 
