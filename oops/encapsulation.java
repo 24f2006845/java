@@ -2,6 +2,11 @@ class Human {
     private String name;
     private int age;
 
+    public Human() {
+        this.name = "";
+        this.age = 0;
+    }
+
     public String getName() {
         return name;
     }
