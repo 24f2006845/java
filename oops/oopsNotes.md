@@ -444,3 +444,111 @@ Now, invalid negative ages are not accepted by the class.
 - A setter is used to update a value
 - Encapsulation is also called data hiding
 - Encapsulation is different from abstraction: encapsulation hides and controls data, while abstraction hides unnecessary implementation details
+
+## 17. `this` keyword
+
+The `this` keyword refers to the current object.
+
+It is used inside an instance method or constructor to access the fields and methods of the current object.
+
+### Why use `this`?
+
+The `this` keyword is especially useful when a method parameter has the same name as a class field.
+
+Example:
+```java
+class Human {
+    private String name;
+    private int age;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+```
+
+In `setName(String name)`:
+- `this.name` refers to the `name` field of the current object
+- `name` refers to the method parameter
+- `this.name = name` stores the parameter value in the object's field
+
+Without `this`, Java cannot clearly distinguish between the field and the parameter:
+```java
+public void setName(String name) {
+    name = name;       // assigns the parameter to itself
+}
+```
+
+The field remains unchanged in this case.
+
+### Example with constructor
+
+The `this` keyword can also be used in a constructor to initialize object fields:
+```java
+class Human {
+    private String name;
+    private int age;
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void display() {
+        System.out.println("Name: " + this.name);
+        System.out.println("Age: " + this.age);
+    }
+}
+
+public class ThisDemo {
+    public static void main(String[] args) {
+        Human human = new Human("Haider", 21);
+        human.display();
+    }
+}
+```
+
+Output:
+```text
+Name: Haider
+Age: 21
+```
+
+### Common uses of `this`
+
+The `this` keyword can be used to:
+- refer to the current object's fields
+- call a method of the current object
+- call another constructor in the same class using `this()`
+- pass the current object as an argument
+- return the current object from a method
+
+Calling another method with `this`:
+```java
+class Message {
+    void show() {
+        System.out.println("Hello");
+    }
+
+    void display() {
+        this.show();
+    }
+}
+```
+
+In most cases, Java allows us to omit `this` when there is no naming conflict:
+```java
+this.show();    // explicit
+show();         // also valid
+```
+
+### Important points
+- `this` refers to the current object
+- `this` cannot be used in a `static` method because static methods do not belong to a specific object
+- `this.fieldName` accesses the current object's field
+- `this.methodName()` calls a method on the current object
+- `this()` calls another constructor in the same class and must be the first statement in that constructor

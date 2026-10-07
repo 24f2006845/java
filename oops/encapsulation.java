@@ -21,8 +21,8 @@ class Human {
 public class encapsulation {
     public static  void main(String[] a) {
         Human h = new Human();
-        h.setName("John");
-        h.setAge(30);
+        h.setName("haider");
+        h.setAge(21);
         System.out.println("Name: " + h.getName());
         System.out.println("Age: " + h.getAge());
 
