@@ -552,3 +552,164 @@ show();         // also valid
 - `this.fieldName` accesses the current object's field
 - `this.methodName()` calls a method on the current object
 - `this()` calls another constructor in the same class and must be the first statement in that constructor
+
+## 18. Constructor
+
+A constructor is a special member of a class that is used to initialize an object.
+
+A constructor is called automatically when an object is created using the `new` keyword.
+
+### Rules of a constructor
+
+- A constructor must have the same name as the class
+- A constructor does not have a return type, not even `void`
+- A constructor is called automatically when an object is created
+- Constructors are used to initialize object fields
+- Constructors can be overloaded
+
+Example:
+```java
+class Human {
+    private String name;
+    private int age;
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void display() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+
+public class ConstructorDemo {
+    public static void main(String[] args) {
+        Human human = new Human("Haider", 21);
+        human.display();
+    }
+}
+```
+
+Output:
+```text
+Name: Haider
+Age: 21
+```
+
+In this example:
+- `Human(String name, int age)` is a parameterized constructor
+- `new Human("Haider", 21)` calls the constructor
+- `this.name = name` stores the constructor parameter in the object's field
+- `this.age = age` stores the constructor parameter in the object's field
+
+### Default constructor
+
+If a class does not contain any constructor, Java provides a default no-argument constructor automatically.
+
+Example:
+```java
+class Student {
+    String name;
+}
+
+Student student = new Student();
+```
+
+Here, `new Student()` works because Java provides a default constructor.
+
+However, if we create any constructor ourselves, Java no longer provides the default constructor automatically:
+```java
+class Student {
+    String name;
+
+    Student(String name) {
+        this.name = name;
+    }
+}
+
+Student student = new Student();    // Error: no no-argument constructor
+```
+
+To support both forms, define the no-argument constructor explicitly:
+```java
+class Student {
+    String name;
+
+    Student() {
+        name = "Unknown";
+    }
+
+    Student(String name) {
+        this.name = name;
+    }
+}
+```
+
+### Constructor overloading
+
+Constructor overloading means having multiple constructors in the same class with different parameter lists.
+
+```java
+class Box {
+    int length;
+    int width;
+
+    Box() {
+        length = 1;
+        width = 1;
+    }
+
+    Box(int length, int width) {
+        this.length = length;
+        this.width = width;
+    }
+}
+
+Box smallBox = new Box();
+Box largeBox = new Box(10, 5);
+```
+
+Java chooses the constructor based on the arguments passed while creating the object.
+
+### Calling one constructor from another
+
+The `this()` keyword can call another constructor in the same class. It must be the first statement of the constructor.
+
+```java
+class Employee {
+    String name;
+    int age;
+
+    Employee() {
+        this("Unknown", 0);
+    }
+
+    Employee(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+The no-argument constructor calls the parameterized constructor, which avoids repeating initialization code.
+
+### Constructor vs method
+
+| Constructor | Method |
+|---|---|
+| Initializes an object | Performs an operation |
+| Must have the class name | Can have any valid name |
+| Has no return type | Has a return type or `void` |
+| Called automatically when an object is created | Called explicitly |
+| Cannot be inherited | Methods can be inherited |
+
+### Important points
+
+- Constructors initialize newly created objects
+- A constructor is called with the `new` keyword
+- A class can have more than one constructor
+- Constructors can have parameters
+- If no constructor is declared, Java supplies a default no-argument constructor
+- Once a constructor is declared, define a no-argument constructor explicitly if it is needed
