@@ -352,3 +352,95 @@ double calculate(int number) { return number; }
 ```
 
 Method overloading is also called compile-time polymorphism because Java decides which method to call during compilation based on the arguments.
+
+## 16. Encapsulation
+
+Encapsulation means wrapping data and the methods that operate on that data inside a class.
+
+It also means hiding the internal data from direct access and allowing access through controlled methods.
+
+In Java, encapsulation is usually achieved by:
+- declaring fields as `private`
+- providing `public` getter methods to read the data
+- providing `public` setter methods to update the data
+
+### Example of encapsulation
+```java
+class Human {
+    private String name;
+    private int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
+
+public class EncapsulationDemo {
+    public static void main(String[] args) {
+        Human human = new Human();
+
+        human.setName("John");
+        human.setAge(30);
+
+        System.out.println("Name: " + human.getName());
+        System.out.println("Age: " + human.getAge());
+    }
+}
+```
+
+In this example:
+- `name` and `age` are `private`, so they cannot be accessed directly outside the `Human` class
+- `getName()` and `getAge()` return the values of the private fields
+- `setName()` and `setAge()` update the values of the private fields
+- `this.name` refers to the field of the current object
+- `name` in `setName(String name)` refers to the method parameter
+
+The following direct access is not allowed:
+```java
+Human human = new Human();
+human.age = 30;          // Error: age has private access
+```
+
+Instead, use the setter:
+```java
+human.setAge(30);
+```
+
+### Benefits of encapsulation
+Encapsulation helps us:
+- protect data from unwanted direct changes
+- control how fields are read and updated
+- add validation inside setter methods
+- hide implementation details
+- make code easier to maintain
+
+For example, a setter can validate the value before storing it:
+```java
+public void setAge(int age) {
+    if (age >= 0) {
+        this.age = age;
+    }
+}
+```
+
+Now, invalid negative ages are not accepted by the class.
+
+### Important points
+- `private` members can be accessed directly only inside their own class
+- `public` methods can be called from other classes
+- A getter is used to read a value
+- A setter is used to update a value
+- Encapsulation is also called data hiding
+- Encapsulation is different from abstraction: encapsulation hides and controls data, while abstraction hides unnecessary implementation details
