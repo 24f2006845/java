@@ -713,3 +713,106 @@ The no-argument constructor calls the parameterized constructor, which avoids re
 - Constructors can have parameters
 - If no constructor is declared, Java supplies a default no-argument constructor
 - Once a constructor is declared, define a no-argument constructor explicitly if it is needed
+
+## 19. Inheritance
+
+Inheritance allows one class to acquire the fields and methods of another class.
+The existing class is called the **parent class**, **superclass**, or **base class**.
+The new class is called the **child class**, **subclass**, or **derived class**.
+
+The child class uses the `extends` keyword:
+
+```java
+class Child extends Parent {
+    // additional fields and methods
+}
+```
+
+### Why is inheritance useful?
+
+Inheritance is useful when there is a genuine **is-a relationship** and multiple
+classes share common behavior. It is not required for every Java program, but
+it helps in these situations:
+
+- **Code reuse:** Write shared behavior once in the parent instead of repeating it
+  in every child class.
+- **Specialization:** A child can add behavior that is specific to it.
+- **Method overriding:** A child can provide its own implementation of a parent
+  method.
+- **Polymorphism:** A parent reference can refer to a child object, allowing
+  Java to call the appropriate overridden method at runtime.
+
+For example, a dog **is an** animal, so `Dog` can inherit common behavior from
+`Animal`. A `Car` should not inherit from `Animal` because there is no valid
+is-a relationship.
+
+### Parent class and child class example
+
+```java
+class Animal {
+    void eat() {
+        System.out.println("Animal eats");
+    }
+
+    void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        System.out.println("Dog barks");
+    }
+
+    void fetch() {
+        System.out.println("Dog fetches the ball");
+    }
+}
+
+public class inheritance {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+
+        dog.eat();        // Inherited from Animal
+        dog.makeSound();  // Dog's overridden version
+        dog.fetch();      // Dog's own method
+
+        Animal animal = new Dog();
+        animal.makeSound(); // Runtime polymorphism: Dog barks
+    }
+}
+```
+
+Output:
+
+```text
+Animal eats
+Dog barks
+Dog fetches the ball
+Dog barks
+```
+
+In this example:
+
+- `Animal` is the parent class.
+- `Dog` is the child class because it extends `Animal`.
+- `Dog` reuses the `eat()` method without defining it again.
+- `Dog` overrides `makeSound()` with behavior appropriate for a dog.
+- `fetch()` belongs only to `Dog`.
+- `Animal animal = new Dog()` shows polymorphism. Although the reference type
+  is `Animal`, Java runs `Dog`'s overridden `makeSound()` method.
+
+Inheritance should be used for a clear parent-child relationship. If classes
+only share a few unrelated utility methods, a separate helper class or
+composition is usually a better choice.
+
+### Important inheritance points
+
+- Use `extends` to inherit from a class.
+- Java allows a class to extend only one class.
+- A child class inherits accessible methods and fields from its parent.
+- Constructors are not inherited, but a child constructor can call a parent
+  constructor using `super()`.
+- Use `@Override` when replacing a parent method so the compiler can verify it.
+- Private members of the parent are not directly accessible in the child.
