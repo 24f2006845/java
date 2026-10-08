@@ -816,3 +816,135 @@ composition is usually a better choice.
   constructor using `super()`.
 - Use `@Override` when replacing a parent method so the compiler can verify it.
 - Private members of the parent are not directly accessible in the child.
+
+## 20. Types of inheritance
+
+Java supports different inheritance structures. The most common structures
+are **single-level inheritance** and **multilevel inheritance**.
+
+### Single-level inheritance
+
+Single-level inheritance means that one child class directly inherits from one
+parent class.
+
+```text
+Parent
+   |
+Child
+```
+
+Example:
+
+```java
+class Calculator {
+    int add(int a, int b) {
+        return a + b;
+    }
+}
+
+class ScientificCalculator extends Calculator {
+    double squareRoot(double number) {
+        return Math.sqrt(number);
+    }
+}
+
+public class SingleLevelDemo {
+    public static void main(String[] args) {
+        ScientificCalculator calculator = new ScientificCalculator();
+
+        System.out.println(calculator.add(10, 5));
+        System.out.println(calculator.squareRoot(25));
+    }
+}
+```
+
+Output:
+
+```text
+15
+5.0
+```
+
+In this example:
+
+- `Calculator` is the parent class.
+- `ScientificCalculator` is the child class.
+- `ScientificCalculator` inherits `add()` from `Calculator`.
+- `squareRoot()` is additional behavior defined by the child class.
+
+The `inheritance.java` file also demonstrates single-level inheritance:
+`ScientificCalculator extends Calculator`.
+
+### Multilevel inheritance
+
+Multilevel inheritance means that a class inherits from a child class, creating
+a chain of inheritance with three or more levels.
+
+```text
+Grandparent
+     |
+  Parent
+     |
+   Child
+```
+
+Example:
+
+```java
+class Vehicle {
+    void start() {
+        System.out.println("Vehicle starts");
+    }
+}
+
+class Car extends Vehicle {
+    void drive() {
+        System.out.println("Car drives");
+    }
+}
+
+class ElectricCar extends Car {
+    void charge() {
+        System.out.println("Electric car charges");
+    }
+}
+
+public class MultilevelDemo {
+    public static void main(String[] args) {
+        ElectricCar car = new ElectricCar();
+
+        car.start();  // Inherited from Vehicle
+        car.drive();  // Inherited from Car
+        car.charge(); // Defined in ElectricCar
+    }
+}
+```
+
+Output:
+
+```text
+Vehicle starts
+Car drives
+Electric car charges
+```
+
+In this example:
+
+- `Vehicle` is the grandparent class.
+- `Car` is both a child of `Vehicle` and a parent of `ElectricCar`.
+- `ElectricCar` is the final child class.
+- `ElectricCar` can use methods from both `Vehicle` and `Car`.
+- The inheritance chain is `Vehicle -> Car -> ElectricCar`.
+
+### Difference between single-level and multilevel inheritance
+
+| Single-level inheritance | Multilevel inheritance |
+|---|---|
+| Has one parent and one child | Has a chain of three or more classes |
+| `Parent -> Child` | `Grandparent -> Parent -> Child` |
+| Easier to understand and maintain | Useful when behavior naturally becomes more specific at each level |
+| Example: `Calculator -> ScientificCalculator` | Example: `Vehicle -> Car -> ElectricCar` |
+
+Multilevel inheritance should represent a valid is-a relationship at every
+level. Avoid making the chain unnecessarily long because changes in a
+grandparent class can affect all of its child classes.
