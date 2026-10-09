@@ -553,7 +553,158 @@ show();         // also valid
 - `this.methodName()` calls a method on the current object
 - `this()` calls another constructor in the same class and must be the first statement in that constructor
 
-## 18. Constructor
+## 18. `super` keyword
+
+The `super` keyword refers to the immediate parent class object.
+
+It is used inside a child class to access members of the parent class. The
+`super` keyword is useful when the child class has a field or method with the
+same name as the parent class.
+
+### Common uses of `super`
+
+The `super` keyword can be used to:
+- access a parent class field
+- call a parent class method
+- call a parent class constructor
+
+### Accessing a parent class field
+
+```java
+class Person {
+    String name = "Person";
+}
+
+class Student extends Person {
+    String name = "Student";
+
+    void displayNames() {
+        System.out.println(name);        // Student's field
+        System.out.println(super.name);  // Person's field
+    }
+}
+
+public class SuperFieldDemo {
+    public static void main(String[] args) {
+        Student student = new Student();
+        student.displayNames();
+    }
+}
+```
+
+Output:
+```text
+Student
+Person
+```
+
+Here, `name` accesses the field in `Student`, while `super.name` accesses the
+field declared in its parent class, `Person`.
+
+### Calling a parent class method
+
+```java
+class Animal {
+    void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void makeSound() {
+        super.makeSound(); // Call the parent implementation
+        System.out.println("Dog barks");
+    }
+}
+
+public class SuperMethodDemo {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.makeSound();
+    }
+}
+```
+
+Output:
+```text
+Animal makes a sound
+Dog barks
+```
+
+`super.makeSound()` calls the parent version before the child adds its own
+behavior. This is useful when the child wants to extend rather than completely
+replace the parent behavior.
+
+### Calling a parent class constructor
+
+`super()` calls the constructor of the immediate parent class.
+
+```java
+class Person {
+    String name;
+
+    Person(String name) {
+        this.name = name;
+    }
+}
+
+class Student extends Person {
+    int rollNumber;
+
+    Student(String name, int rollNumber) {
+        super(name);
+        this.rollNumber = rollNumber;
+    }
+
+    void display() {
+        System.out.println("Name: " + name);
+        System.out.println("Roll number: " + rollNumber);
+    }
+}
+
+public class SuperConstructorDemo {
+    public static void main(String[] args) {
+        Student student = new Student("Haider", 101);
+        student.display();
+    }
+}
+```
+
+Output:
+```text
+Name: Haider
+Roll number: 101
+```
+
+In this example:
+- `super(name)` calls the `Person` constructor
+- the parent constructor initializes `name`
+- `this.rollNumber` initializes the child class field
+
+### Important rules for `super`
+
+- `super` refers to the immediate parent class, not any distant ancestor
+- `super()` must be the first statement in a child constructor
+- If a child constructor does not explicitly call `super()`, Java inserts an
+  implicit no-argument `super()` call
+- The implicit call works only when the parent has an accessible no-argument
+  constructor
+- `super()` and `this()` cannot both be used in the same constructor because
+  both must be the first statement
+- `super` cannot be used in a `static` method
+- Private members of the parent cannot be accessed directly with `super`
+
+### Difference between `this` and `super`
+
+| `this` | `super` |
+|---|---|
+| Refers to the current class object | Refers to the immediate parent class |
+| Accesses current class fields and methods | Accesses parent class fields and methods |
+| `this()` calls another constructor in the same class | `super()` calls a constructor in the parent class |
+| Used to resolve conflicts with current class members | Used to access or reuse parent class members |
+
+## 19. Constructor
 
 A constructor is a special member of a class that is used to initialize an object.
 
@@ -714,7 +865,7 @@ The no-argument constructor calls the parameterized constructor, which avoids re
 - If no constructor is declared, Java supplies a default no-argument constructor
 - Once a constructor is declared, define a no-argument constructor explicitly if it is needed
 
-## 19. Inheritance
+## 20. Inheritance
 
 Inheritance allows one class to acquire the fields and methods of another class.
 The existing class is called the **parent class**, **superclass**, or **base class**.
@@ -817,7 +968,34 @@ composition is usually a better choice.
 - Use `@Override` when replacing a parent method so the compiler can verify it.
 - Private members of the parent are not directly accessible in the child.
 
-## 20. Types of inheritance
+### Method overriding
+
+Method overriding means a child class gives a new implementation to a method
+that already exists in the parent class.
+
+Rules:
+- The method name and parameters must be the same.
+- Use `@Override` to let Java check the method.
+- It happens between a parent and child class.
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+```
+
+When `Dog` calls `sound()`, Java runs the child's version: `Dog barks`.
+
+## 21. Types of inheritance
 
 Java supports different inheritance structures. The most common structures
 are **single-level inheritance** and **multilevel inheritance**.
