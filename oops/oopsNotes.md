@@ -1152,3 +1152,39 @@ In this example:
 Multilevel inheritance should represent a valid is-a relationship at every
 level. Avoid making the chain unnecessarily long because changes in a
 grandparent class can affect all of its child classes.
+
+## 23. Polymorphism
+
+Polymorphism means **one name with many forms**.
+
+In Java, the same method name can behave differently in different situations.
+
+### Types of polymorphism
+
+1. **Compile-time polymorphism:** Method overloading.
+2. **Runtime polymorphism:** Method overriding.
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Dog barks");
+    }
+}
+
+public class PolymorphismDemo {
+    public static void main(String[] args) {
+        Animal animal = new Dog();
+        animal.sound(); // Dog barks
+    }
+}
+```
+
+Here, the parent reference `animal` refers to a `Dog` object, so Java calls the
+overridden method at runtime.
