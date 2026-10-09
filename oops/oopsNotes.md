@@ -445,7 +445,33 @@ Now, invalid negative ages are not accepted by the class.
 - Encapsulation is also called data hiding
 - Encapsulation is different from abstraction: encapsulation hides and controls data, while abstraction hides unnecessary implementation details
 
-## 17. `this` keyword
+## 17. Access modifiers
+
+Access modifiers control where a class, field, method, or constructor can be
+used.
+
+| Modifier | Access |
+|---|---|
+| `public` | From anywhere |
+| `private` | Only inside the same class |
+| `protected` | Same package and child classes |
+| Default | Same package only |
+
+If no modifier is written, it is called **default** access.
+
+```java
+class Account {
+    public String owner;       // Available everywhere
+    private double balance;    // Available only in Account
+    protected String type;     // Same package and child classes
+    int number;                // Default: same package only
+}
+```
+
+Use `private` fields with public methods when you want to protect data. This is
+one of the main ideas of encapsulation.
+
+## 18. `this` keyword
 
 The `this` keyword refers to the current object.
 
@@ -553,7 +579,7 @@ show();         // also valid
 - `this.methodName()` calls a method on the current object
 - `this()` calls another constructor in the same class and must be the first statement in that constructor
 
-## 18. `super` keyword
+## 19. `super` keyword
 
 The `super` keyword refers to the immediate parent class object.
 
@@ -704,7 +730,7 @@ In this example:
 | `this()` calls another constructor in the same class | `super()` calls a constructor in the parent class |
 | Used to resolve conflicts with current class members | Used to access or reuse parent class members |
 
-## 19. Constructor
+## 20. Constructor
 
 A constructor is a special member of a class that is used to initialize an object.
 
@@ -865,7 +891,7 @@ The no-argument constructor calls the parameterized constructor, which avoids re
 - If no constructor is declared, Java supplies a default no-argument constructor
 - Once a constructor is declared, define a no-argument constructor explicitly if it is needed
 
-## 20. Inheritance
+## 21. Inheritance
 
 Inheritance allows one class to acquire the fields and methods of another class.
 The existing class is called the **parent class**, **superclass**, or **base class**.
@@ -995,7 +1021,7 @@ class Dog extends Animal {
 
 When `Dog` calls `sound()`, Java runs the child's version: `Dog barks`.
 
-## 21. Types of inheritance
+## 22. Types of inheritance
 
 Java supports different inheritance structures. The most common structures
 are **single-level inheritance** and **multilevel inheritance**.
