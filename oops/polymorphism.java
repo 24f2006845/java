@@ -21,6 +21,21 @@ class Dog extends Animal {
     }
 }
 
+class FinalKeywordNotes {
+    // final variable: value cannot be changed after initialization
+    final int MAX_SCORE = 100;
+
+    // final method: cannot be overridden in subclasses
+    final void showMessage() {
+        System.out.println("This method is final and cannot be overridden.");
+    }
+}
+
+// final class: cannot be inherited
+final class FinalClass {
+    int value = 50;
+}
+
 public class polymorphism {
     public static void main(String[] args) {
         // Compile-time polymorphism: method overloading
