@@ -339,6 +339,69 @@ if (animal instanceof Dog) {
 }
 ```
 
+### Upcasting and Downcasting
+
+Upcasting and downcasting are special forms of reference casting used with inheritance.
+
+#### Upcasting
+
+Upcasting means converting a subclass object to its superclass type. It is safe and usually happens automatically.
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Animal sound");
+    }
+}
+
+class Dog extends Animal {
+    void bark() {
+        System.out.println("Dog barks");
+    }
+}
+
+Animal animal = new Dog(); // Upcasting
+animal.sound();
+```
+
+Key points:
+
+- A Dog object can be treated as an Animal.
+- Upcasting is automatic and does not require a cast operator.
+- You can access only methods and variables declared in the parent type.
+
+#### Downcasting
+
+Downcasting means converting a superclass reference back to a subclass type. This is not always safe, so Java requires an explicit cast.
+
+```java
+Animal animal = new Dog();
+Dog dog = (Dog) animal; // Downcasting
+
+dog.bark();
+dog.sound();
+```
+
+Key points:
+
+- Downcasting is explicit and may throw ClassCastException if the object is not actually of that subclass.
+- Use instanceof before downcasting when the object type is uncertain.
+
+```java
+Animal animal = new Dog();
+
+if (animal instanceof Dog) {
+    Dog dog = (Dog) animal;
+    dog.bark();
+}
+```
+
+#### Summary
+
+- Upcasting: subclass -> superclass, safe, automatic
+- Downcasting: superclass -> subclass, unsafe, explicit cast
+- Always check the actual object type before downcasting
+
 ### Conversion vs Casting vs Parsing
 
 | Concept | Meaning | Example |
