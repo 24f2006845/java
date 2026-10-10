@@ -353,6 +353,93 @@ double calculate(int number) { return number; }
 
 Method overloading is also called compile-time polymorphism because Java decides which method to call during compilation based on the arguments.
 
+## Wrapper Classes
+
+Wrapper classes are classes that wrap primitive data types in objects.
+
+In Java, primitive types like `int`, `double`, `char`, and `boolean` are not objects, but wrapper classes allow them to be used as objects when needed.
+
+### Why wrapper classes are used
+
+Wrapper classes are useful when:
+- we need to store primitive values in collections such as `ArrayList`
+- we need to convert primitive values into objects
+- we need to use utility methods such as `Integer.parseInt()`
+- we want object-style behavior in generic programming
+
+### Common wrapper classes
+
+| Primitive type | Wrapper class |
+|---|---|
+| `byte` | `Byte` |
+| `short` | `Short` |
+| `int` | `Integer` |
+| `long` | `Long` |
+| `float` | `Float` |
+| `double` | `Double` |
+| `char` | `Character` |
+| `boolean` | `Boolean` |
+
+### Autoboxing and unboxing
+
+Java automatically converts between primitive types and wrapper classes.
+
+#### Autoboxing
+
+Autoboxing means converting a primitive value into its corresponding wrapper object automatically.
+
+```java
+int number = 10;
+Integer obj = number;   // autoboxing
+```
+
+#### Unboxing
+
+Unboxing means converting a wrapper object into its primitive value automatically.
+
+```java
+Integer obj = 20;
+int number = obj;       // unboxing
+```
+
+### Example
+
+```java
+public class WrapperExample {
+    public static void main(String[] args) {
+        int age = 25;
+        Integer wrappedAge = age;   // autoboxing
+
+        System.out.println("Age: " + age);
+        System.out.println("Wrapped age: " + wrappedAge);
+
+        Integer score = 90;
+        int marks = score;          // unboxing
+
+        System.out.println("Marks: " + marks);
+
+        String value = "100";
+        int parsed = Integer.parseInt(value);
+        System.out.println("Parsed value: " + parsed);
+    }
+}
+```
+
+Output:
+```text
+Age: 25
+Wrapped age: 25
+Marks: 90
+Parsed value: 100
+```
+
+### Important points
+
+- Wrapper classes convert primitive values into objects.
+- Java provides automatic boxing and unboxing.
+- Wrapper classes are useful in data structures and utility methods.
+- Example: `Integer.valueOf(10)`, `Double.parseDouble("3.14")`
+
 ## 16. Encapsulation
 
 Encapsulation means wrapping data and the methods that operate on that data inside a class.
