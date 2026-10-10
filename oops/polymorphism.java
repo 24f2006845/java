@@ -31,10 +31,29 @@ class FinalKeywordNotes {
     }
 }
 
-// final class: cannot be inherited
-final class FinalClass {
-    int value = 50;
+class ParentWithFinalMethod {
+    // final method: a subclass cannot override it
+    final void finalMethod() {
+        System.out.println("This is a final method.");
+    }
 }
+
+class ChildWithFinalMethod extends ParentWithFinalMethod {
+    // Uncommenting the method below will cause a compile error:
+    // void finalMethod() {
+    //     System.out.println("This is not allowed");
+    // }
+}
+
+// final class: cannot be inherited by any subclass
+final class FinalClassExample {
+    void display() {
+        System.out.println("This is a final class.");
+    }
+}
+
+// class AnotherClass extends FinalClassExample { }
+// This will cause a compile error because FinalClassExample is final
 
 public class polymorphism {
     public static void main(String[] args) {
