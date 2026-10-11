@@ -1275,3 +1275,100 @@ public class PolymorphismDemo {
 
 Here, the parent reference `animal` refers to a `Dog` object, so Java calls the
 overridden method at runtime.
+
+## 24. `abstract` Keyword
+
+The `abstract` keyword is used to achieve **abstraction**. It can be used with
+classes and methods to define incomplete behavior that subclasses must
+complete.
+
+### Abstract class
+
+An abstract class cannot be instantiated directly.
+
+```java
+abstract class Animal {
+    abstract void sound();
+
+    void eat() {
+        System.out.println("Animal eats");
+    }
+}
+```
+
+An abstract class:
+
+- can contain abstract and concrete methods
+- can contain constructors, variables, and static methods
+- must be extended by a subclass
+- can be declared without containing any abstract methods
+
+```java
+// Animal animal = new Animal(); // Error
+```
+
+### Abstract method
+
+An abstract method has no body. A concrete subclass must implement it.
+
+```java
+abstract void sound();
+```
+
+Abstract methods:
+
+- must be declared inside an abstract class or an interface
+- cannot be `private`, `static`, or `final`
+- must be implemented by a subclass unless that subclass is also abstract
+
+### Example
+
+```java
+abstract class Shape {
+    abstract void draw();
+
+    void message() {
+        System.out.println("This is a shape");
+    }
+}
+
+class Circle extends Shape {
+    @Override
+    void draw() {
+        System.out.println("Drawing circle");
+    }
+}
+
+public class AbstractDemo {
+    public static void main(String[] args) {
+        Shape shape = new Circle();
+        shape.draw();
+        shape.message();
+    }
+}
+```
+
+Output:
+
+```text
+Drawing circle
+This is a shape
+```
+
+### Important rules
+
+- An abstract class can have constructors, but it cannot be instantiated.
+- A class cannot be both `abstract` and `final`.
+- A subclass must implement all inherited abstract methods, or it must also be
+  declared `abstract`.
+- Abstract classes support runtime polymorphism through parent references.
+
+### Abstract class vs interface
+
+| Abstract class | Interface |
+| --- | --- |
+| Declared using `abstract class` | Declared using `interface` |
+| Can have constructors | Cannot have normal constructors |
+| Can have instance variables | Variables are `public`, `static`, and `final` by default |
+| A class can extend only one abstract class | A class can implement multiple interfaces |
+| Can contain abstract and concrete methods | Can contain abstract, default, static, and private methods |
