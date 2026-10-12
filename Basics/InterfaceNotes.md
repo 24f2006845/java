@@ -161,7 +161,129 @@ Since Java 9, private methods can be used as helpers inside an interface.
 They can be called by default or static methods in that interface, but not by
 implementing classes.
 
-## 5. Real-World Example: E-Commerce Order Service
+## 5. Annotations
+
+An annotation is metadata added to Java code. It starts with `@` and gives
+information to the compiler, tools, or runtime without changing the main
+behavior of the code.
+
+### Common Built-in Annotations
+
+#### `@Override`
+
+`@Override` tells the compiler that a method is replacing a method from a
+parent class or interface.
+
+```java
+interface PaymentGateway {
+    boolean pay(String orderId, double amount);
+}
+
+class UpiPaymentGateway implements PaymentGateway {
+    @Override
+    public boolean pay(String orderId, double amount) {
+        return true;
+    }
+}
+```
+
+If the method name or parameter list is incorrect, the compiler reports an
+error instead of silently treating it as a new method. This helps catch
+spelling and signature mistakes.
+
+#### `@FunctionalInterface`
+
+`@FunctionalInterface` verifies that an interface has exactly one abstract
+method, allowing it to be used with a lambda expression.
+
+```java
+@FunctionalInterface
+interface DiscountPolicy {
+    double apply(double amount);
+}
+
+DiscountPolicy discount = amount -> amount * 0.90;
+System.out.println(discount.apply(1000)); // 900.0
+```
+
+Adding another abstract method to `DiscountPolicy` causes a compile-time error.
+
+#### `@Deprecated`
+
+`@Deprecated` marks code that should no longer be used because a newer or
+safer alternative exists.
+
+```java
+class PaymentUtils {
+    @Deprecated
+    static void oldPaymentMethod() {
+        System.out.println("Use processPayment instead.");
+    }
+
+    static void processPayment() {
+        System.out.println("Processing payment");
+    }
+}
+```
+
+The compiler or IDE displays a warning when deprecated code is used.
+
+#### `@SuppressWarnings`
+
+`@SuppressWarnings` tells the compiler not to display a specific warning.
+Suppress only warnings that are understood and intentional.
+
+```java
+@SuppressWarnings("deprecation")
+static void runLegacyPayment() {
+    PaymentUtils.oldPaymentMethod();
+}
+```
+
+### Creating a Custom Annotation
+
+You can define your own annotation with `@interface`:
+
+```java
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.RUNTIME)
+@interface Audited {
+    String value();
+}
+
+class OrderService {
+    @Audited("order-payment")
+    void processPayment() {
+        System.out.println("Payment processed");
+    }
+}
+```
+
+- `@Target` specifies where the annotation can be used.
+- `@Retention` specifies how long the annotation is available.
+- `RetentionPolicy.RUNTIME` makes it available while the program is running,
+  so reflection-based tools can read it.
+
+Annotations do not automatically execute code. A framework or application
+must read them and decide what they mean.
+
+```java
+import java.lang.reflect.Method;
+
+Method method = OrderService.class.getDeclaredMethod("processPayment");
+Audited audit = method.getAnnotation(Audited.class);
+System.out.println(audit.value()); // order-payment
+```
+
+Use annotations to add metadata, validation, or configuration. Use ordinary
+methods and fields when the code needs to perform the actual business logic.
+
+## 6. Real-World Example: E-Commerce Order Service
 
 An online store may support UPI, card, wallet, and bank payment providers.
 The order service should not be tightly coupled to one provider.
@@ -256,7 +378,7 @@ class CardPaymentGateway implements PaymentGateway {
 }
 ```
 
-## 6. Interface and Lambda Expressions
+## 7. Interface and Lambda Expressions
 
 An interface with exactly one abstract method is called a **functional
 interface**. It can be implemented with a lambda expression.
@@ -274,7 +396,7 @@ System.out.println(festivalDiscount.apply(1000));
 `@FunctionalInterface` is optional, but it makes the compiler verify that the
 interface has only one abstract method.
 
-## 7. Interface vs Abstract Class
+## 8. Interface vs Abstract Class
 
 | Interface | Abstract class |
 | --- | --- |
