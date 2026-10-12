@@ -10,6 +10,7 @@
 6. [Loops](#6-loops)
 7. [Static Keyword and Methods](#7-static-keyword-and-methods)
 8. [Enhanced for Loop](#8-enhanced-for-loop)
+9. [Enums](#9-enums)
 
 ---
 
@@ -875,6 +876,132 @@ for (int index = 0; index < numbers.length; index++) {
 
 ---
 
+## 9. Enums
+
+An enum, short for enumeration, is a special type that represents a fixed set of named constants. Enums are useful when a variable should have one value from a known list.
+
+### Declaring an Enum
+
+```java
+enum Day {
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
+}
+```
+
+Enum constants are accessed through the enum type:
+
+```java
+Day today = Day.MONDAY;
+
+System.out.println(today); // MONDAY
+```
+
+Enum constants are objects, not strings. The type of `today` is `Day`, so assigning an arbitrary string is not allowed:
+
+```java
+// Day today = "MONDAY"; // Error
+```
+
+### Enum in a switch Statement
+
+Enums work well with `switch` statements:
+
+```java
+Day day = Day.SATURDAY;
+
+switch (day) {
+    case SATURDAY:
+    case SUNDAY:
+        System.out.println("Weekend");
+        break;
+    default:
+        System.out.println("Weekday");
+}
+```
+
+The `case` labels use the enum constants directly; the enum type name is not repeated.
+
+### Enum Methods
+
+Every enum provides useful methods such as `values()`, `valueOf()`, `name()`, and `ordinal()`:
+
+```java
+for (Day day : Day.values()) {
+    System.out.println(day.name() + " - position " + day.ordinal());
+}
+
+Day selected = Day.valueOf("FRIDAY");
+System.out.println(selected); // FRIDAY
+```
+
+- `values()` returns an array containing all constants in declaration order.
+- `valueOf(String)` returns the constant with the matching name.
+- `name()` returns the exact constant name as a string.
+- `ordinal()` returns the zero-based declaration position.
+
+`valueOf()` throws `IllegalArgumentException` when the name does not match an enum constant. `ordinal()` should not be used as a permanent database or external identifier because changing the declaration order changes the value.
+
+### Enum with Fields, Constructor, and Methods
+
+An enum can contain fields, a constructor, and methods:
+
+```java
+enum Size {
+    SMALL("S"),
+    MEDIUM("M"),
+    LARGE("L");
+
+    private final String code;
+
+    Size(String code) {
+        this.code = code;
+    }
+
+    public String getCode() {
+        return code;
+    }
+}
+
+System.out.println(Size.MEDIUM.getCode()); // M
+```
+
+Enum constructors are implicitly private. Enum constants are created by Java, so code cannot use `new Size(...)`.
+
+### Comparing Enum Values
+
+Use `==` or `!=` to compare enum constants:
+
+```java
+Day day = Day.MONDAY;
+
+if (day == Day.MONDAY) {
+    System.out.println("The week has started.");
+}
+```
+
+Enum constants are single, predefined objects, so identity comparison with `==` is safe and clear. Avoid comparing them as strings.
+
+### Enum Collections
+
+`EnumSet` and `EnumMap` are specialized collections for enum values:
+
+```java
+import java.util.EnumSet;
+
+EnumSet<Day> weekend = EnumSet.of(Day.SATURDAY, Day.SUNDAY);
+System.out.println(weekend.contains(Day.SUNDAY)); // true
+```
+
+Use an enum when the possible values are fixed and known at compile time. Use a class or another data structure when values need to be created or changed dynamically.
+
+---
+
 ## Final Quick Revision
 
 - Java is platform-independent because bytecode runs on the JVM.
@@ -886,3 +1013,4 @@ for (int index = 0; index < numbers.length; index++) {
 - Static members belong to the class; instance members belong to each object.
 - The main method is the entry point of a Java application.
 - Enhanced for loops are best for reading through arrays and collections.
+- Enums represent a fixed set of named constants and provide type-safe values.
