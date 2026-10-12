@@ -5,6 +5,10 @@ public class Interfaces {
 
         OrderService orderService = new OrderService(gateway, notificationService);
         orderService.placeOrder("ORD-1001", 1499.0);
+
+        DiscountPolicy festivalDiscount = amount -> amount * 0.90;
+        double discountedAmount = festivalDiscount.apply(1499.0);
+        System.out.println("Festival price: Rs." + discountedAmount);
     }
 
     interface PaymentGateway {
@@ -21,6 +25,11 @@ public class Interfaces {
 
     interface NotificationService {
         void send(String recipient, String message);
+    }
+
+    @FunctionalInterface
+    interface DiscountPolicy {
+        double apply(double amount);
     }
 
     static class EmailNotificationService implements NotificationService {

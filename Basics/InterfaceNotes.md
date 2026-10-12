@@ -380,8 +380,89 @@ class CardPaymentGateway implements PaymentGateway {
 
 ## 7. Interface and Lambda Expressions
 
-An interface with exactly one abstract method is called a **functional
-interface**. It can be implemented with a lambda expression.
+### Functional Interface
+
+A functional interface is an interface with exactly one abstract method. It
+may also contain any number of `default` and `static` methods because those
+methods already have an implementation.
+
+`@FunctionalInterface` is optional, but it makes the compiler verify that the
+interface has exactly one abstract method.
+
+```java
+@FunctionalInterface
+interface DiscountPolicy {
+    double apply(double amount);
+}
+```
+
+This interface represents a rule that receives an amount and returns a
+calculated amount. It can be implemented using a normal class:
+
+```java
+class FestivalDiscount implements DiscountPolicy {
+    @Override
+    public double apply(double amount) {
+        return amount * 0.90;
+    }
+}
+```
+
+Adding another abstract method to `DiscountPolicy` causes a compile-time
+error:
+
+```java
+// double calculateTax(double amount); // Not allowed with @FunctionalInterface
+```
+
+### Lambda Expression
+
+A lambda expression is a short way to provide the implementation of a
+functional interface without creating a separate class.
+
+```java
+DiscountPolicy festivalDiscount = amount -> amount * 0.90;
+
+System.out.println(festivalDiscount.apply(1000));
+```
+
+The general syntax is:
+
+```java
+(parameters) -> expression
+(parameters) -> { statements; }
+```
+
+Examples:
+
+```java
+DiscountPolicy noDiscount = amount -> amount;
+DiscountPolicy flatDiscount = amount -> {
+    if (amount >= 1000) {
+        return amount - 100;
+    }
+    return amount;
+};
+```
+
+The parameter type and return type are inferred from the functional interface.
+The following forms are also valid:
+
+```java
+@FunctionalInterface
+interface MessageSender {
+    void send(String message);
+}
+
+MessageSender sender = message -> System.out.println(message);
+sender.send("Order confirmed");
+```
+
+### Real-Life Example: Order Discount Rules
+
+An online store can use different discount rules during different campaigns.
+The order service can receive a `DiscountPolicy` instead of being changed
+every time the business creates a new offer.
 
 ```java
 @FunctionalInterface
@@ -389,12 +470,70 @@ interface DiscountPolicy {
     double apply(double amount);
 }
 
-DiscountPolicy festivalDiscount = amount -> amount * 0.90;
-System.out.println(festivalDiscount.apply(1000));
+class OrderService {
+    private final DiscountPolicy discountPolicy;
+
+    OrderService(DiscountPolicy discountPolicy) {
+        this.discountPolicy = discountPolicy;
+    }
+
+    double calculateFinalAmount(double amount) {
+        return discountPolicy.apply(amount);
+    }
+}
+
+DiscountPolicy festivalOffer = amount -> amount * 0.90;
+OrderService orderService = new OrderService(festivalOffer);
+
+double finalAmount = orderService.calculateFinalAmount(2000);
+System.out.println(finalAmount); // 1800.0
 ```
 
-`@FunctionalInterface` is optional, but it makes the compiler verify that the
-interface has only one abstract method.
+The same service can use another policy without changing its code:
+
+```java
+DiscountPolicy premiumCustomerOffer = amount -> amount >= 1500
+        ? amount - 250
+        : amount;
+
+OrderService premiumOrder = new OrderService(premiumCustomerOffer);
+System.out.println(premiumOrder.calculateFinalAmount(2000)); // 1750.0
+```
+
+This is useful because:
+
+- the discount rule is replaceable
+- `OrderService` depends on a behavior, not a concrete discount class
+- each offer can be tested independently
+- new campaigns do not require changes to the order service
+
+### Common Built-in Functional Interfaces
+
+The `java.util.function` package provides common functional interfaces:
+
+| Interface | Abstract method | Purpose |
+| --- | --- | --- |
+| `Predicate<T>` | `boolean test(T value)` | Checks a condition |
+| `Function<T, R>` | `R apply(T value)` | Converts a value |
+| `Consumer<T>` | `void accept(T value)` | Uses a value without returning one |
+| `Supplier<T>` | `T get()` | Produces a value without input |
+
+Example:
+
+```java
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+Predicate<Double> expensiveOrder = amount -> amount > 1000;
+Function<Double, Double> addTax = amount -> amount * 1.18;
+
+System.out.println(expensiveOrder.test(1500.0)); // true
+System.out.println(addTax.apply(1000.0));        // 1180.0
+```
+
+Use a lambda when the behavior is short and used locally. Use a named class or
+method when the behavior is complex, reused widely, or needs a descriptive
+name.
 
 ## 8. Interface vs Abstract Class
 
