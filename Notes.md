@@ -1109,11 +1109,77 @@ This example shows a real scenario: the program tries to withdraw money, handles
 
 #### throw
 
-Use `throw` to create and send an exception intentionally.
+The `throw` keyword is used inside a method or block to create and send one
+specific exception intentionally.
+
+### Syntax
 
 ```java
-throw new IllegalArgumentException("Age must be 18 or older.");
+throw new ExceptionType("Useful error message");
 ```
+
+When Java reaches a `throw` statement:
+
+1. It stops executing the current block.
+2. It looks for a matching `catch` block.
+3. If a matching `catch` block is found, that block handles the exception.
+4. Otherwise, the exception is passed to the calling method.
+5. If nobody handles it, the program terminates and prints a stack trace.
+
+### Example: Validating an Age
+
+```java
+static void registerUser(int age) {
+    if (age < 18) {
+        throw new IllegalArgumentException("User must be at least 18 years old.");
+    }
+
+    System.out.println("User registered successfully.");
+}
+
+public static void main(String[] args) {
+    try {
+        registerUser(16);
+    } catch (IllegalArgumentException e) {
+        System.out.println("Registration failed: " + e.getMessage());
+    }
+}
+```
+
+Output:
+
+```text
+Registration failed: User must be at least 18 years old.
+```
+
+The method uses `throw` because an age below 18 is invalid for the business
+rule. The `try-catch` in `main` prevents the application from ending abruptly.
+
+### `throw` with Different Exception Types
+
+```java
+int numerator = 10;
+int denominator = 0;
+
+if (denominator == 0) {
+    throw new ArithmeticException("Denominator cannot be zero.");
+}
+
+int result = numerator / denominator;
+```
+
+`throw` can be used with built-in exceptions such as `IllegalArgumentException`,
+`IllegalStateException`, and `ArithmeticException`, or with a custom exception.
+
+### `throw` vs `throws`
+
+| Keyword | Purpose | Location | Example |
+| --- | --- | --- | --- |
+| `throw` | Actually sends one exception | Inside a method or block | `throw new IllegalArgumentException();` |
+| `throws` | Declares possible exceptions | In a method signature | `void read() throws IOException` |
+
+`throw` is used to perform the action. `throws` informs the caller that the
+method may pass an exception to it.
 
 #### throws
 
