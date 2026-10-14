@@ -20,6 +20,14 @@ public class exceptionHandling {
         }
     }
 
+    static void registerUser(int age) {
+        if (age < 18) {
+            throw new IllegalArgumentException("User must be at least 18 years old.");
+        }
+
+        System.out.println("User registered successfully.");
+    }
+
     public static void main(String[] args) {
         BankAccount account = new BankAccount(1000.0);
 
@@ -33,6 +41,12 @@ public class exceptionHandling {
             System.out.println("Transaction failed: " + e.getMessage());
         } finally {
             System.out.println("Transaction attempt finished.");
+        }
+
+        try {
+            registerUser(16);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Registration failed: " + e.getMessage());
         }
     }
 }
