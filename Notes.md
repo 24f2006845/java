@@ -11,6 +11,7 @@
 7. [Static Keyword and Methods](#7-static-keyword-and-methods)
 8. [Enhanced for Loop](#8-enhanced-for-loop)
 9. [Enums](#9-enums)
+10. [Exception Handling](#10-exception-handling)
 
 ---
 
@@ -999,6 +1000,162 @@ System.out.println(weekend.contains(Day.SUNDAY)); // true
 ```
 
 Use an enum when the possible values are fixed and known at compile time. Use a class or another data structure when values need to be created or changed dynamically.
+
+---
+
+## 10. Exception Handling
+
+An exception is an event that interrupts the normal flow of a program. In Java, exceptions are used to handle errors gracefully without crashing the application.
+
+### Why Exception Handling Is Important
+
+Without exception handling, a runtime problem such as invalid input, missing files, or divide-by-zero errors could stop the program immediately.
+
+Exception handling helps us to:
+
+- prevent abrupt program termination
+- show user-friendly error messages
+- keep the application running when possible
+- handle unexpected situations safely
+
+### Exception Hierarchy
+
+Java exceptions are organized in a class hierarchy:
+
+```text
+Throwable
+├── Error
+│   └── serious JVM problems, usually not handled
+└── Exception
+    ├── checked exceptions
+    └── unchecked exceptions (RuntimeException)
+```
+
+Common examples:
+
+- `ArithmeticException`: divide by zero
+- `NullPointerException`: using a null reference
+- `ArrayIndexOutOfBoundsException`: invalid array index
+- `NumberFormatException`: invalid numeric conversion
+- `FileNotFoundException`: file does not exist
+
+### try, catch, and finally
+
+```java
+try {
+    // risky code
+} catch (ExceptionType e) {
+    // handle the exception
+} finally {
+    // runs no matter what
+}
+```
+
+- `try`: contains the code that may throw an exception
+- `catch`: handles the type of exception raised
+- `finally`: always executes, often for cleanup such as closing files or database connections
+
+### Real Example: ATM Withdrawal
+
+```java
+public class BankAccount {
+    private double balance;
+
+    public BankAccount(double balance) {
+        this.balance = balance;
+    }
+
+    public void withdraw(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Withdrawal amount must be greater than zero.");
+        }
+
+        if (amount > balance) {
+            throw new IllegalStateException("Insufficient balance in the account.");
+        }
+
+        balance -= amount;
+        System.out.println("Withdrawal successful. Remaining balance: " + balance);
+    }
+
+    public static void main(String[] args) {
+        BankAccount account = new BankAccount(1000.0);
+
+        try {
+            String input = "2500";
+            double amount = Double.parseDouble(input);
+            account.withdraw(amount);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid amount entered. Please type a number.");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Transaction failed: " + e.getMessage());
+        } finally {
+            System.out.println("Transaction attempt finished.");
+        }
+    }
+}
+```
+
+Output:
+
+```text
+Transaction failed: Insufficient balance in the account.
+Transaction attempt finished.
+```
+
+This example shows a real scenario: the program tries to withdraw money, handles invalid numeric input, prevents negative or impossible amounts, and always prints a final message even if the transaction fails.
+
+### throw and throws
+
+#### throw
+
+Use `throw` to create and send an exception intentionally.
+
+```java
+throw new IllegalArgumentException("Age must be 18 or older.");
+```
+
+#### throws
+
+Use `throws` in a method signature when the method may pass an exception to the caller.
+
+```java
+public void readFile() throws IOException {
+    // code that may throw IOException
+}
+```
+
+### Custom Exceptions
+
+You can create your own exception classes when a domain-specific problem needs a custom message.
+
+```java
+class InvalidAgeException extends Exception {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
+}
+```
+
+Then you can throw it when needed:
+
+```java
+if (age < 18) {
+    throw new InvalidAgeException("Age must be at least 18.");
+}
+```
+
+### Best Practices
+
+- Catch the most specific exception first.
+- Do not swallow exceptions without handling them.
+- Log or print a useful message.
+- Use `finally` to release resources.
+- Avoid using empty catch blocks.
+
+### Summary
+
+Exception handling is an important part of Java programming. It helps your program recover from errors, provide meaningful feedback, and continue running safely. In real applications, errors can happen due to bad user input, missing files, invalid network responses, or unexpected runtime states, so your code should always be prepared for them.
 
 ---
 
