@@ -42,6 +42,17 @@ public class exceptionHandling {
         System.out.println("User registered with a valid age.");
     }
 
+    static void validateAge(int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Age must be at least 18.");
+        }
+    }
+
+    static void createAccount(int age) throws InvalidAgeException {
+        validateAge(age); // Passes the exception to the caller.
+        System.out.println("Account created successfully.");
+    }
+
     public static void main(String[] args) {
         BankAccount account = new BankAccount(1000.0);
 
@@ -67,6 +78,12 @@ public class exceptionHandling {
             registerUserWithCustomException(16);
         } catch (InvalidAgeException e) {
             System.out.println("Custom exception: " + e.getMessage());
+        }
+
+        try {
+            createAccount(16);
+        } catch (InvalidAgeException e) {
+            System.out.println("Account creation failed: " + e.getMessage());
         }
     }
 }

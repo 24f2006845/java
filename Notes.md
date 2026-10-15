@@ -1191,6 +1191,45 @@ public void readFile() throws IOException {
 }
 ```
 
+### Exception Ducking
+
+Exception ducking means that a method does not handle a checked exception
+itself. Instead, it declares the exception with `throws` and passes the
+responsibility to its caller. The caller can handle the exception or duck it
+again by declaring `throws` too.
+
+```java
+static void validateAge(int age) throws InvalidAgeException {
+    if (age < 18) {
+        throw new InvalidAgeException("Age must be at least 18.");
+    }
+}
+
+static void createAccount(int age) throws InvalidAgeException {
+    validateAge(age); // Ducking: passes the exception to main().
+    System.out.println("Account created successfully.");
+}
+
+public static void main(String[] args) {
+    try {
+        createAccount(16);
+    } catch (InvalidAgeException e) {
+        System.out.println("Account creation failed: " + e.getMessage());
+    }
+}
+```
+
+Output:
+
+```text
+Account creation failed: Age must be at least 18.
+```
+
+Here, `validateAge()` throws the exception. `createAccount()` does not catch
+it, so it ducks the exception by declaring `throws InvalidAgeException`.
+Finally, `main()` handles it with `try-catch`. Exception ducking is useful when
+the current method cannot make the best decision about how to recover.
+
 ### Custom Exceptions
 
 A custom exception is a user-defined exception created for a specific
