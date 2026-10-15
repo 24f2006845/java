@@ -12,6 +12,7 @@
 8. [Enhanced for Loop](#8-enhanced-for-loop)
 9. [Enums](#9-enums)
 10. [Exception Handling](#10-exception-handling)
+11. [Threads](#11-threads)
 
 ---
 
@@ -1300,6 +1301,181 @@ Exception handling is an important part of Java programming. It helps your progr
 
 ---
 
+## 11. Threads
+
+A thread is a lightweight unit of execution inside a program. A Java
+application starts with one thread called the **main thread**. A program can
+create additional threads so that multiple tasks can run concurrently.
+
+For example, one thread can download a file while another thread updates the
+user interface. Threads are useful for background work, servers, games, and
+applications that need to remain responsive.
+
+### Process vs Thread
+
+- A **process** is a running program with its own memory.
+- A **thread** is a smaller execution path inside a process.
+- Threads in the same process share memory, so communication is fast.
+- Shared memory must be used carefully because multiple threads can change it
+  at the same time.
+
+### Creating a Thread with `Runnable`
+
+The recommended approach is usually to implement `Runnable`, because the
+class can still extend another class if necessary.
+
+```java
+class DownloadTask implements Runnable {
+    @Override
+    public void run() {
+        for (int file = 1; file <= 3; file++) {
+            System.out.println("Downloading file " + file);
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.out.println("Download was interrupted.");
+                return;
+            }
+        }
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) throws InterruptedException {
+        Thread downloadThread = new Thread(new DownloadTask());
+        downloadThread.start();
+
+        System.out.println("Main thread continues working.");
+        downloadThread.join();
+        System.out.println("Download completed.");
+    }
+}
+```
+
+Important points:
+
+- `run()` contains the task that the thread performs.
+- `start()` creates a new thread and then calls `run()` on that thread.
+- Calling `run()` directly does not create a new thread; it runs like a normal
+  method on the current thread.
+- `sleep()` pauses the current thread for a specified time.
+- `join()` makes the current thread wait until another thread finishes.
+
+### Creating a Thread by Extending `Thread`
+
+```java
+class GreetingThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Hello from a separate thread.");
+    }
+}
+
+GreetingThread thread = new GreetingThread();
+thread.start();
+```
+
+Implementing `Runnable` is generally more flexible than extending `Thread`.
+
+### Thread Lifecycle
+
+A thread commonly moves through these states:
+
+```text
+NEW -> RUNNABLE -> RUNNING -> BLOCKED / WAITING / TIMED_WAITING -> TERMINATED
+```
+
+- `NEW`: the thread object exists, but `start()` has not been called.
+- `RUNNABLE`: ready to run or currently running, depending on the scheduler.
+- `BLOCKED`: waiting to acquire a lock.
+- `WAITING`: waiting indefinitely for another thread or event.
+- `TIMED_WAITING`: waiting for a limited time, such as during `sleep()`.
+- `TERMINATED`: the `run()` method has finished.
+
+### Race Conditions and `synchronized`
+
+A race condition occurs when multiple threads access shared data and the final
+result depends on the order in which the threads run.
+
+Use `synchronized` to allow only one thread at a time to execute a critical
+section:
+
+```java
+class Counter {
+    private int value;
+
+    public synchronized void increment() {
+        value++;
+    }
+
+    public int getValue() {
+        return value;
+    }
+}
+
+public class CounterExample {
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
+
+        Thread first = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+
+        Thread second = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
+
+        first.start();
+        second.start();
+        first.join();
+        second.join();
+
+        System.out.println(counter.getValue()); // 2000
+    }
+}
+```
+
+Without `synchronized`, both threads could read the same old value and
+overwrite each other's updates. This would produce a value less than `2000`.
+
+### Interrupting a Thread
+
+`interrupt()` requests that a thread stop what it is doing. It does not force
+the thread to stop immediately. The thread should respond to the interruption
+and clean up safely.
+
+```java
+Thread worker = new Thread(() -> {
+    try {
+        Thread.sleep(5000);
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+        System.out.println("Worker stopped safely.");
+    }
+});
+
+worker.start();
+worker.interrupt();
+```
+
+### Thread Safety Best Practices
+
+- Prefer local variables because they are not shared between threads.
+- Protect shared mutable data with synchronization or thread-safe classes.
+- Use `start()`, not a direct call to `run()`, when creating a new thread.
+- Restore the interrupt status after catching `InterruptedException` unless the
+  interruption is fully handled.
+- Prefer `ExecutorService` for managing many tasks instead of manually
+  creating a large number of threads.
+
+---
+
 ## Final Quick Revision
 
 - Java is platform-independent because bytecode runs on the JVM.
@@ -1312,3 +1488,4 @@ Exception handling is an important part of Java programming. It helps your progr
 - The main method is the entry point of a Java application.
 - Enhanced for loops are best for reading through arrays and collections.
 - Enums represent a fixed set of named constants and provide type-safe values.
+- Threads allow multiple tasks to execute concurrently within a Java process.
