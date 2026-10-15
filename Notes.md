@@ -1193,7 +1193,11 @@ public void readFile() throws IOException {
 
 ### Custom Exceptions
 
-You can create your own exception classes when a domain-specific problem needs a custom message.
+A custom exception is a user-defined exception created for a specific
+application rule. It makes error messages more meaningful than using a
+general-purpose exception.
+
+#### Creating and Using a Custom Exception
 
 ```java
 class InvalidAgeException extends Exception {
@@ -1201,13 +1205,45 @@ class InvalidAgeException extends Exception {
         super(message);
     }
 }
+
+static void registerUser(int age) throws InvalidAgeException {
+    if (age < 18) {
+        throw new InvalidAgeException("Age must be at least 18 to register.");
+    }
+
+    System.out.println("User registered successfully.");
+}
+
+public static void main(String[] args) {
+    try {
+        registerUser(16);
+    } catch (InvalidAgeException e) {
+        System.out.println("Registration failed: " + e.getMessage());
+    }
+}
 ```
 
-Then you can throw it when needed:
+Output:
+
+```text
+Registration failed: Age must be at least 18 to register.
+```
+
+In this example:
+
+- `InvalidAgeException` is a custom checked exception because it extends `Exception`.
+- `registerUser()` declares `throws InvalidAgeException`.
+- `throw new InvalidAgeException(...)` creates and sends the exception.
+- The `catch` block handles the custom exception.
+
+If the exception should not require callers to catch or declare it, extend
+`RuntimeException` instead:
 
 ```java
-if (age < 18) {
-    throw new InvalidAgeException("Age must be at least 18.");
+class InvalidAgeException extends RuntimeException {
+    public InvalidAgeException(String message) {
+        super(message);
+    }
 }
 ```
 

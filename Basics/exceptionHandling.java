@@ -1,4 +1,10 @@
 public class exceptionHandling {
+    static class InvalidAgeException extends Exception {
+        public InvalidAgeException(String message) {
+            super(message);
+        }
+    }
+
     static class BankAccount {
         private double balance;
 
@@ -28,6 +34,14 @@ public class exceptionHandling {
         System.out.println("User registered successfully.");
     }
 
+    static void registerUserWithCustomException(int age) throws InvalidAgeException {
+        if (age < 18) {
+            throw new InvalidAgeException("Age must be at least 18 to register.");
+        }
+
+        System.out.println("User registered with a valid age.");
+    }
+
     public static void main(String[] args) {
         BankAccount account = new BankAccount(1000.0);
 
@@ -47,6 +61,12 @@ public class exceptionHandling {
             registerUser(16);
         } catch (IllegalArgumentException e) {
             System.out.println("Registration failed: " + e.getMessage());
+        }
+
+        try {
+            registerUserWithCustomException(16);
+        } catch (InvalidAgeException e) {
+            System.out.println("Custom exception: " + e.getMessage());
         }
     }
 }
