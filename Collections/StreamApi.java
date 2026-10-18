@@ -21,6 +21,18 @@ public class StreamApi {
 		new Order("O-1005", "Ravi", 180.00, "COMPLETED"));
 
 	/*
+	 * filter() selects completed orders, map() extracts only their amounts,
+	 * and reduce() combines all amounts into one total. The identity value
+	 * 0.0 is the starting total and is also the result for an empty stream.
+	 */
+	double completedRevenue = orders.stream()
+		.filter(order -> order.status().equals("COMPLETED"))
+		.map(Order::amount)
+		.reduce(0.0, (total, amount) -> total + amount);
+
+	System.out.println("Completed revenue: $" + completedRevenue);
+
+	/*
 	 * filter() keeps only orders that match a condition.
 	 * sorted() orders the remaining elements.
 	 * map() transforms each Order into the text we want to display.
