@@ -35,7 +35,22 @@ public class StreamApi {
 		.collect(Collectors.toList());
 
 	System.out.println("Completed orders by highest amount:");
-	completedOrderSummary.forEach(System.out::println);
+	/*
+	 * forEach() accepts a Consumer<T>. The lambda below receives one summary
+	 * at a time and prints it. Because this is a sequential stream/list
+	 * traversal, the summaries are printed in their list order.
+	 */
+	completedOrderSummary.forEach(summary -> System.out.println(summary));
+
+	/*
+	 * forEachOrdered() is useful when a parallel stream is used but the output
+	 * must still follow the encounter order. Ordinary parallel forEach() does
+	 * not promise that order.
+	 */
+	System.out.println("\nOrder IDs in their original order:");
+	orders.parallelStream()
+		.map(Order::id)
+		.forEachOrdered(orderId -> System.out.println(orderId));
 
 	/*
 	 * groupingBy() creates a Map where each customer is a key. The

@@ -99,7 +99,81 @@ Terminal operations produce a result or a side effect and start the pipeline.
 | `allMatch` | Checks whether every value matches |
 | `findFirst` | Returns the first matching value |
 
-## 4. Real example
+## 4. `forEach`: performing an action for every value
+
+`forEach` is a terminal operation used when we want to perform an action for
+each stream element, such as printing a value, sending a notification, or
+calling another service:
+
+```java
+List<String> names = List.of("Asha", "Ravi", "Mina");
+
+names.stream()
+	.forEach(name -> System.out.println("Hello, " + name));
+```
+
+The lambda is a `Consumer<String>`. A `Consumer<T>` represents an operation
+that accepts one value and returns nothing. The same code can be written with
+a method reference:
+
+```java
+names.stream().forEach(System.out::println);
+```
+
+### How `forEach` works internally
+
+1. `names.stream()` creates a stream connected to the list.
+2. `forEach(...)` is a terminal operation, so it starts the pipeline.
+3. The stream obtains elements from its source, normally through a
+   `Spliterator`.
+4. Each element is passed to the `Consumer` once.
+5. The `Consumer` performs its action; `forEach` does not create a new list or
+   return a value.
+6. The stream closes after all elements have been processed.
+
+This is called **internal iteration**. With an ordinary loop, the developer
+controls the iteration:
+
+```java
+for (String name : names) {
+    System.out.println("Hello, " + name);
+}
+```
+
+With `forEach`, the Stream API controls the iteration and the developer only
+provides the action to perform. This makes the operation concise and allows
+the stream implementation to choose a suitable traversal strategy.
+
+### `forEach` and ordering
+
+For an ordinary sequential stream, `forEach` usually processes elements in
+encounter order. However, code should not depend on that behavior for a
+parallel stream:
+
+```java
+names.parallelStream()
+	.forEach(System.out::println); // Order is not guaranteed
+
+names.parallelStream()
+	.forEachOrdered(System.out::println); // Encounter order is preserved
+```
+
+`parallelStream()` can split the source into parts and process those parts on
+multiple threads. This can make `forEach` faster for some large, independent
+workloads, but it can also add overhead. `forEachOrdered` must coordinate the
+results to preserve order, which can reduce the benefit of parallelism.
+
+### Important cautions
+
+- Use `forEach` for a side effect, not to build a result. Use `map`, `collect`,
+  or `reduce` when the goal is to produce data.
+- Avoid changing the source collection from inside `forEach`.
+- Avoid updating shared mutable variables from a parallel `forEach`; multiple
+  threads can update them at the same time and cause incorrect results.
+- `forEach` returns `void`, so it cannot be chained with another stream
+  operation.
+
+## 5. Real example
 
 `StreamApi.java` contains a complete online-store example. Its first pipeline:
 
@@ -129,7 +203,7 @@ Map<String, Double> revenueByCustomer = orders.stream()
 		Collectors.summingDouble(Order::amount)));
 ```
 
-## 5. Useful rules and cautions
+## 6. Useful rules and cautions
 
 - Prefer a stream when the operation is a clear data transformation or query.
 - Use an ordinary loop when the logic has complex control flow, needs early
