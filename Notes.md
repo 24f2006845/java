@@ -1,5 +1,94 @@
 # Java Notes
 
+## How to Study This Folder
+
+Read the topics in the order below. Each stage uses ideas from the previous
+stage, and each topic links to a note file and a Java file with examples.
+
+### Stage 1: Java Fundamentals
+
+Start here to learn the language structure, values, decisions, repetition,
+methods, and errors.
+
+1. [Java setup and first program](Basics/javaProgram.java)
+2. [Variables, types, operators, and input](Basics/basics.java)
+3. [Conditions and loops](Basics/loops.java)
+4. [Methods and the `static` keyword](Basics/basics.java)
+5. [Exception handling](Basics/exceptionHandling.java)
+6. Review the matching concepts in [Java Basics](#1-java-basics) through
+    [Exception Handling](#10-exception-handling) below.
+
+### Stage 2: Memory, Arrays, and Text
+
+Learn how Java stores values, groups fixed-size data, and works with text.
+
+1. [Stack and heap notes](StackAndHeap/StackAndHeapJava.md) and
+    [stack/heap example](StackAndHeap/StackAndHeapsInJava.java)
+2. [Array notes](Array/ArrayNotes.md) and [array examples](Array/Array.java)
+3. [String notes](String/StringNotes.md) and [string examples](String/String.java)
+
+### Stage 3: Object-Oriented Programming
+
+Move from individual methods to reusable designs with classes, objects,
+inheritance, encapsulation, and polymorphism.
+
+1. [OOP basics](oops/oopsNotes.md) and [basic OOP example](oops/demo.java)
+2. [Encapsulation](oops/encapsulation.java)
+3. [Inheritance](oops/inheritance.java)
+4. [Polymorphism](oops/polymorphism.java)
+5. [Abstract, inner, and anonymous classes](Basics/classesNotes.md) with
+    [examples](Basics/classes.java)
+6. [Interfaces and contracts](Basics/InterfaceNotes.md) with
+    [interface examples](Basics/Interfaces.java)
+
+### Stage 4: Collections and Data Processing
+
+Learn how to store groups of objects and process them clearly.
+
+1. [Collections notes](Collections/CollectionNotes.md) and
+    [collections example](Collections/collection.java)
+2. [Stream API notes](Collections/StreamApiNotes.md) and
+    [Stream API example](Collections/StreamApi.java)
+
+When revising Streams, remember the common pipeline order:
+
+```text
+source -> filter -> map -> sorted/grouped -> reduce/collect/forEach
+```
+
+### Stage 5: Concurrency
+
+Study this after understanding objects, collections, and memory, because
+threads share heap data and can expose race conditions.
+
+1. [Thread fundamentals and advanced concurrency](Basics/MultiThread.md)
+2. [Thread-pool example](Basics/multiThread.java)
+3. [Race-condition example](Basics/RaceCondition.java)
+
+### Revision Checklist
+
+- [ ] Write and run a class with `main`.
+- [ ] Explain primitive values versus object references.
+- [ ] Use conditions, loops, methods, and exception handling.
+- [ ] Explain stack frames, heap objects, and garbage collection.
+- [ ] Choose between an array, `ArrayList`, `Set`, `Map`, and `Queue`.
+- [ ] Explain class, object, constructor, encapsulation, inheritance, and polymorphism.
+- [ ] Choose an interface when code should depend on a contract.
+- [ ] Build a Stream pipeline using `filter`, `map`, `reduce`, and `collect`.
+- [ ] Explain why `forEach` is different from `map`.
+- [ ] Explain a race condition and choose a suitable concurrency tool.
+
+### How to Revise Each Topic
+
+For every note file, use this three-pass method:
+
+1. Read the explanation and vocabulary.
+2. Type the example yourself instead of only reading it.
+3. Change one value or rule, run the matching Java file, and explain the new output.
+
+The examples use small real-world situations such as orders, payments,
+students, and reports so that each Java feature has a reason to exist.
+
 ## Table of Contents
 
 1. [Java Basics](#1-java-basics)
