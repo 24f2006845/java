@@ -16,7 +16,8 @@ public class StackAndHeapsInJava {
 		int marks = 85;
 
 		// new creates a Student object in the heap.
-		// student is a reference stored in main()'s stack frame.
+		// student is a reference stored in main()'s stack frame. Java copies
+		// this reference when it is passed to another method.
 		Student student = createStudent("Asha", 20);
 
 		// This method call creates another stack frame.

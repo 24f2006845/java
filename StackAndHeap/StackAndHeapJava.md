@@ -193,3 +193,223 @@ When no references point to an object, it becomes eligible for garbage collectio
 - A local object variable usually stores a heap reference in the stack frame.
 - Stack frames are removed when methods return.
 - Heap objects are removed later when they are no longer reachable and garbage collection reclaims them.
+
+## 10. Basic mental model: values and references
+
+Java is always **pass-by-value**. When the value is an object, the value being copied is
+the reference, not the object itself.
+
+```java
+Student first = new Student("Asha", 20);
+Student second = first;       // copies the reference
+second.name = "Mina";
+
+System.out.println(first.name); // Mina
+```
+
+`first` and `second` are two stack variables that point to the same heap object. Assigning
+`second` does not copy the `Student`; changing the object through either reference changes
+the same object. To create a separate object, construct one explicitly or provide a copy
+constructor.
+
+For a primitive parameter, the primitive value is copied:
+
+```java
+static void addTen(int value) {
+	value += 10;
+}
+
+int score = 80;
+addTen(score);
+// score is still 80
+```
+
+## 11. Intermediate level: object lifetime and reachability
+
+Garbage collection is based on **reachability**, not on the variable's scope alone. The
+garbage collector starts from GC roots, such as:
+
+- local references in active thread stack frames
+- static fields
+- running threads
+- JNI references
+
+It follows references from those roots. An object that cannot be reached is eligible for
+collection.
+
+```java
+Student student = new Student("Asha", 20);
+student = null;
+```
+
+After the assignment, the `Student` object has no reference from this code and may be
+collected. `System.gc()` is only a request and must not be used as a correctness mechanism.
+Use `try-with-resources` to release files, sockets, and database connections; garbage
+collection does not reliably release those external resources.
+
+An application can still have a **memory leak** in a garbage-collected language by
+accidentally keeping references:
+
+```java
+static final List<Student> cache = new ArrayList<>();
+
+void remember(Student student) {
+	cache.add(student); // the cache keeps every Student reachable
+}
+```
+
+Use bounded caches, expiration, and explicit removal when data should no longer be kept.
+
+## 12. Advanced JVM memory areas
+
+The simple stack/heap model is useful, but a JVM process has more memory areas:
+
+| Area | Purpose |
+|---|---|
+| Java thread stack | Frames, parameters, local variables, and operand-stack data for one thread |
+| Heap | Objects and arrays managed by the garbage collector |
+| Metaspace | Class metadata; native memory rather than the Java heap |
+| Code cache | JIT-compiled machine code |
+| Direct/native memory | Buffers and libraries allocated outside the Java heap |
+
+The exact layout depends on the JVM implementation and version. The Java language
+specification does not require every object or primitive to be physically stored in one
+particular place. For example, a JIT compiler may use **escape analysis** to keep a
+short-lived object on the stack or remove an allocation entirely when it cannot escape a
+method. Therefore, use the stack/heap model to understand ownership and lifetime, not as
+a promise about every machine address.
+
+`static` fields are associated with a class, not with one method call. A static field can
+keep a heap object reachable for as long as its class remains loaded:
+
+```java
+class Configuration {
+	static final Map<String, String> VALUES = new HashMap<>();
+}
+```
+
+## 13. Garbage collection and heap generations
+
+Most objects are short-lived. Modern collectors commonly organize the heap into
+generational regions:
+
+1. New objects begin in a young area.
+2. Frequent young collections reclaim objects that die quickly.
+3. Objects that survive collections may be promoted or moved to an older area.
+4. Older objects are collected less frequently, depending on the collector.
+
+The exact names and behavior differ between collectors such as G1, Parallel GC, and ZGC.
+Garbage collection pauses are affected by allocation rate, live data, heap size, object
+graph shape, and collector configuration. A larger heap is not automatically faster:
+it can reduce collection frequency but may increase memory use or collection work.
+
+Useful diagnostic options vary by JDK, but common starting points include:
+
+```bash
+java -Xms256m -Xmx1g -Xlog:gc* MyApplication
+```
+
+- `-Xms` sets the initial heap size.
+- `-Xmx` sets the maximum Java heap size.
+- `-Xlog:gc*` enables unified GC logging on modern JDKs.
+
+Tune only after measuring. Do not select a collector or heap size solely from a
+stack-versus-heap diagram.
+
+## 14. Common memory failures
+
+### `StackOverflowError`
+
+Usually caused by unbounded recursion or very deep call nesting:
+
+```java
+static void recurse() {
+	recurse();
+}
+```
+
+Each call needs another stack frame. Fix the termination condition or replace recursion
+with an iterative algorithm where appropriate.
+
+### `OutOfMemoryError: Java heap space`
+
+The JVM cannot allocate an object in the Java heap. Common causes include an unbounded
+collection, loading too much data at once, or a cache without an eviction policy.
+
+### `OutOfMemoryError: Metaspace`
+
+Class metadata cannot be allocated. This can occur with excessive dynamic class
+generation or class-loader leaks.
+
+### Native/direct-memory exhaustion
+
+Direct buffers and native libraries can consume process memory outside `-Xmx`. Always
+consider total process memory, not only the Java heap, when deploying an application.
+
+## 15. Real-world example: processing an online order
+
+Imagine an e-commerce API handling this request:
+
+```java
+Order order = orderService.createOrder(customerId, cartItems);
+```
+
+During the request:
+
+```text
+THREAD STACK                                  HEAP
+------------                                  ----
+createOrder() frame                           Order object
+customerId = 42                               customerId = 42
+cartItems -> [references]                     items -> [OrderItem objects]
+order -> -----------------------------------> status = CREATED
+                                              total = 95.00
+```
+
+1. The web-server thread receives the request and gets a stack frame for
+   `createOrder()`.
+2. `customerId`, method parameters, and local references are stored in that frame.
+3. The order, its item list, and item objects are created in the heap.
+4. Helper calls such as `calculateTotal()` add temporary stack frames.
+5. When the method returns, its stack frame is removed and the returned `Order` reference
+   is handed to the caller.
+6. If the application stores the order in a repository, cache, or response object, it
+   remains reachable. Otherwise, after the response is complete and no other references
+   remain, it becomes eligible for garbage collection.
+
+This distinction explains two production problems:
+
+- A large order list increases heap pressure because many objects remain reachable.
+- A request that recursively calls itself can exhaust the thread stack even if the heap
+  has plenty of free space.
+
+For a real service, avoid keeping request objects in static collections, paginate large
+database results, close external resources, and measure allocation and GC behavior under
+representative load.
+
+## 16. How to investigate memory issues
+
+When diagnosing a problem, identify which area is exhausted instead of immediately
+increasing `-Xmx`:
+
+1. Check whether the error is stack, heap, metaspace, or native-memory related.
+2. Inspect GC logs, heap usage, thread counts, and allocation rate.
+3. Capture a heap dump for a suspected heap leak and inspect the largest retained
+   objects.
+4. Look for long-lived roots such as static fields, caches, listeners, and thread locals.
+5. For stack problems, inspect the stack trace for recursion or unexpectedly deep calls.
+6. Re-test after changing one factor at a time.
+
+Tools such as Java Flight Recorder, `jcmd`, VisualVM, and Eclipse MAT can help, but
+production diagnostics should follow the application's security and data-handling rules.
+
+## 17. Quick interview and review checklist
+
+- Is this a primitive value or an object reference?
+- Which method frame owns this local variable?
+- What references keep this object reachable?
+- Could a static field, cache, listener, or `ThreadLocal` retain it?
+- Is recursion bounded?
+- Are external resources closed independently of garbage collection?
+- Is the observed problem heap, stack, metaspace, or native memory?
+- Have GC and allocation changes been measured rather than guessed?
